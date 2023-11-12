@@ -1,0 +1,58 @@
+version: '3.8'
+name: psp-dev
+services:
+  psp-mediator-db:
+    image: postgres
+    container_name: psp-mediator-db
+    restart: always
+    ports:
+      - "5401:5432"
+    environment:
+      POSTGRES_DB: psp-mediator-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - psp-mediator-data:/var/lib/postgresql/data
+    networks:
+      psp-net:
+  bank-app-db:
+    image: postgres
+    container_name: bank-app-db
+    restart: always
+    ports:
+      - "5400:5432"
+    environment:
+      POSTGRES_DB: bank-app-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - bank-app-data:/var/lib/postgresql/data
+    networks:
+      psp-net:
+  psp-activemq:
+    image: rmohr/activemq
+    ports:
+      - "8161:8161"  # Web Console
+      - "61616:61616" # JMS
+    environment:
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+      - ACTIVEMQ_WRITE_LOGIN=writer
+      - ACTIVEMQ_WRITE_PASSWORD=writer
+      - ACTIVEMQ_READ_LOGIN=reader
+      - ACTIVEMQ_READ_PASSWORD=reader
+    volumes:
+      - psp-activemq-data:/data/activemq
+      - psp-activemq-logs:/var/log/activemq
+networks:
+  psp-net:
+    driver: bridge
+volumes:
+  bank-app-data:
+    driver: local
+  psp-mediator-data:
+    driver: local
+  psp-activemq-data:
+    driver: local
+  psp-activemq-logs:
+    driver: local

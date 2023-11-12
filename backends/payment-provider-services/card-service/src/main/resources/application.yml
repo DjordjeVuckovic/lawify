@@ -1,0 +1,19 @@
+server:
+  port: ${PORT:8082}
+
+spring:
+  application:
+    name: card-service
+  activemq:
+    broker-url: ${BROKER_URL:tcp://localhost:61616}
+    user: ${BROKER_USER:admin}
+    password: ${BROKER_PASSWORD:admin}
+    pool:
+      enabled: true
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+

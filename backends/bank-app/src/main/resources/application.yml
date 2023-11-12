@@ -1,0 +1,18 @@
+server:
+  port: ${PORT:8000}
+
+spring:
+  application:
+    name: bank-app
+# db config
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5400/bank-app-db}
+    username: ${DB_USER:user}
+    password: ${DB_PASSWORD:user}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+
