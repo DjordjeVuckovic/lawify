@@ -18,7 +18,7 @@ public class MessageBrokerConfig {
 
     @Bean
     public MappingJackson2MessageConverter jacksonJmsMessageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        var converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         return converter;
@@ -26,7 +26,7 @@ public class MessageBrokerConfig {
 
     @Bean
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        var factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(jacksonJmsMessageConverter());
         return factory;
@@ -34,7 +34,7 @@ public class MessageBrokerConfig {
 
     @Bean
     public JmsTemplate jmsTemplate() {
-        JmsTemplate template = new JmsTemplate(connectionFactory);
+        var template = new JmsTemplate(connectionFactory);
         template.setMessageConverter(jacksonJmsMessageConverter());
         return template;
     }

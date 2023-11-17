@@ -15,7 +15,21 @@ services:
       - psp-mediator-data:/var/lib/postgresql/data
     networks:
       psp-net:
-  bank-app-db:
+  accquier-bank-app-db:
+    image: postgres
+    container_name: bank-app-db
+    restart: always
+    ports:
+      - "5400:5432"
+    environment:
+      POSTGRES_DB: bank-app-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - bank-app-data:/var/lib/postgresql/data
+    networks:
+      psp-net:
+  issuer-bank-app-db:
     image: postgres
     container_name: bank-app-db
     restart: always

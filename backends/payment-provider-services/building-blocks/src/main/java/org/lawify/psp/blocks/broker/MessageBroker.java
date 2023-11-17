@@ -15,4 +15,12 @@ public class MessageBroker implements IMessageBroker {
         log.info("Sending message {}",message);
         jmsTemplate.convertAndSend(destination, message);
     }
+//    public <TRequest,TResponse> TResponse sendAndReceive(String queueName, TRequest message) {
+//        return jmsTemplate.sendAndReceive(queueName, session -> {
+//            TextMessage textMessage = session.createTextMessage(message);
+//            Destination replyQueue = session.createTemporaryQueue();
+//            textMessage.setJMSReplyTo(replyQueue);
+//            return textMessage;
+//        });
+//    }
 }
