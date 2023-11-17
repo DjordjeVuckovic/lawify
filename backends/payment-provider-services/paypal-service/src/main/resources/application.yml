@@ -10,3 +10,8 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
 
+paypal:
+  client:
+    id: CLIENT_ID
+    secret: CLIENT_SECRET
+  mode: sandbox

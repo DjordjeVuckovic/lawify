@@ -97,7 +97,6 @@
                 <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
                 <version>${open-api.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
