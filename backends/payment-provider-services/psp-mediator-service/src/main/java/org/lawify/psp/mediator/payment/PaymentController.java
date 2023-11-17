@@ -14,7 +14,8 @@ public class PaymentController {
     private final IMessageBroker jmsTemplate;
     @PostMapping(value = "")
     public ResponseEntity<?> processPayment(@RequestBody PaymentRequest request){
-        jmsTemplate.send("card-service-queue", new PaymentMessage(request.Amount));
+        jmsTemplate.send("pay_pal_queue",new PaymentMessage(request.Amount));
+      /*  jmsTemplate.send("card-service-queue", new PaymentMessage(request.Amount));*/
         jmsTemplate.send("queue", new PaymentMessage(request.Amount));
         return ResponseEntity.ok().build();
     }
