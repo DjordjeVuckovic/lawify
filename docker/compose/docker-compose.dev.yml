@@ -1,6 +1,20 @@
 version: '3.8'
 name: psp-dev
 services:
+  agency-db:
+    image: postgres
+    container_name: agency-db
+    restart: always
+    ports:
+      - "5404:5432"
+    environment:
+      POSTGRES_DB: agency-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - agency-data:/var/lib/postgresql/data
+    networks:
+      psp-net:
   psp-mediator-db:
     image: postgres
     container_name: psp-mediator-db
@@ -48,6 +62,8 @@ networks:
   psp-net:
     driver: bridge
 volumes:
+  agency-data:
+    driver: local
   bank-app-data:
     driver: local
   psp-mediator-data:
