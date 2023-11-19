@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "subscription_service", indexes = {
+@Table(name = "subscription_services", indexes = {
         @Index(name= "sub_name_index", columnList = "name"),
         @Index(name= "queue_name_index", columnList = "queueName"),
 })
@@ -23,4 +23,6 @@ public class SubscriptionService {
     private String name;
     @Column
     private String queueName;
+    @Column
+    private String imageUrl;
 }

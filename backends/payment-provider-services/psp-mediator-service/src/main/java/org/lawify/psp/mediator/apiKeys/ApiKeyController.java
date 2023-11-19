@@ -1,9 +1,8 @@
 package org.lawify.psp.mediator.apiKeys;
 
-import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.apiKeys.dto.ApiKeyRequest;
-import org.lawify.psp.mediator.utils.ResponseBuilder;
+import org.lawify.psp.mediator.shared.utils.ResponseBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
