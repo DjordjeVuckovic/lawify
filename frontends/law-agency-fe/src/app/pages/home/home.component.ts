@@ -4,6 +4,7 @@ import {ProductCardComponent} from "../../shared/components/product-card/product
 import {ProductService} from "../../core/services/product.service";
 import {take} from "rxjs";
 import {ProductResponse} from "../../shared/model/response/product-response";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-home',
@@ -29,5 +30,8 @@ export class HomeComponent implements OnInit{
   }
   onBuy($event : ProductResponse){
     console.log($event)
+    // TODO  Send http request  to agency backend
+    // TODO from agency be send http to psp {amount, merchant id, api key, order id}
+    // TODO receive url and do redication
   }
 }

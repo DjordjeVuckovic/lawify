@@ -1,0 +1,39 @@
+.navbar-wrapper {
+  background: var(--primary);
+  color: var(--text-color);
+  border-bottom: 3px solid #222529;
+}
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-color);
+}
+.navbar-menu-middle {
+  gap: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.navbar-menu-end{
+  gap: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.logo-container{
+  padding-bottom: 0;
+  .image-logo{
+    cursor: pointer;
+    width: 4rem;
+    height: 4rem;
+    &:hover{
+      transform: scale(1.02);
+    }
+  }
+}
+.button-link{
+  text-decoration: none;
+  color: var(--text-color);
+}
