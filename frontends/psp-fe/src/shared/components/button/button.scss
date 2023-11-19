@@ -1,0 +1,17 @@
+.button{
+  background: var(--main);
+  align-items: center;
+  justify-content: center;
+  border: none;
+  color: var(--text-color);
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 26px;
+  width: 10rem;
+}
+.button:hover{
+  cursor: pointer;
+  scale: 1.03;
+  transition: .1s ease-in-out;
+}

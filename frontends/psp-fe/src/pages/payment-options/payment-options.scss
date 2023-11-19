@@ -1,0 +1,11 @@
+.payment-options-wrapper{
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  gap: 3rem;
+  align-items: center;
+}
+.payments-list{
+  display: flex;
+  gap: 2em;
+}
