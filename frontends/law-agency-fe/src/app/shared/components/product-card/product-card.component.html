@@ -1,0 +1,11 @@
+<div class="card">
+  <div class="img-ctn">
+    <img class="card-img-top" src="assets/photos/box.jpg" alt="Product image">
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{product?.name}}</h5>
+    <p class="card-text">{{product?.amount}} EUR</p>
+    <app-button [info]="'Buy'"
+                (click)="onBuy()"/>
+  </div>
+</div>

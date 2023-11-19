@@ -1,0 +1,10 @@
+<div class="home-wrapper">
+  <h1>Choose products</h1>
+  <div class="products list">
+    @for (product of products; track product.id) {
+      <app-product-card [product]="product"
+                        (buy)="onBuy($event)"
+      />
+    }
+  </div>
+</div>
