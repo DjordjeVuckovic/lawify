@@ -8,7 +8,6 @@ using LawAgency.Api.PspConfig;
 using LawAgency.Api.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
 
 namespace LawAgency.Api.Orders;
@@ -31,6 +30,7 @@ public static class CreateOrder
     public class CreateOrderCommandResponse 
     {
         public Guid Id { get; set; }
+        public string RedirectUrl { get; set; } = null!;
     }
     internal sealed class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand,Result<CreateOrderCommandResponse>>
     {
@@ -43,6 +43,10 @@ public static class CreateOrder
             _context = context;
             _options = options;
             _client = client;
+        }
+        public class InitialTransactionResponse {
+            public string PspUrl { get; set; } = null!;
+            private Guid Id { get; set; }
         }
 
         public async Task<Result<CreateOrderCommandResponse>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -62,15 +66,16 @@ public static class CreateOrder
             var requestContent = CreateJsonRequest(entity.Entity);
             _client.DefaultRequestHeaders.Add("X-API-KEY", _options.Value.ApiKey);
             var response = await _client.PostAsync(_options.Value.PspUrl, requestContent, cancellationToken);
-            if (response.IsSuccessStatusCode)
-            {
-                //TODO success     
-            }
-           
+            if (!response.IsSuccessStatusCode) return Result.Fail(OrderErrors.CreatingTransactionFailed);
+            var responseString = await response.Content
+                .ReadFromJsonAsync<InitialTransactionResponse>(cancellationToken: cancellationToken);
+                
             return new CreateOrderCommandResponse
             {
-                Id = entity.Entity.Id
+                Id = entity.Entity.Id,
+                RedirectUrl = responseString!.PspUrl
             };
+
         }
 
         private StringContent CreateJsonRequest(Order entity)

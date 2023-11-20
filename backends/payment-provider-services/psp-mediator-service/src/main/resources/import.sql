@@ -13,3 +13,6 @@ on conflict(id) do nothing;
 insert into public.subscription_services(id, queue_name, name, image_url)
 values ('df632760-7c54-451e-9428-dcf739ac3c3e', 'crypto-service-queue', 'Crypto', 'https://wedoblob.blob.core.windows.net/psp/crypto-bitcoin.png')
 on conflict(id) do nothing;
+
+INSERT INTO public.merchants (id, email, password, roles, bank_account, name) VALUES ('ff7307fd-e64d-46cb-8539-50f9ba14f66b', 'lawify@gmail.com', '$2a$10$iUYcPHUZXafgTLXZACjXxe3bz5tMexuqoT7bzbo7KS7mldCbvuTQO', '{0}', E'\\xDEEAD6AB79353A3FD1DFA50D042703D59A4F2262722A6861112E6C6AF82F8F4D', 'Lawify');
+INSERT INTO public.api_keys (id, created_at, expired_at, key, merchant_id) VALUES ('341b2916-e4f5-41d5-a4a1-2c74eba4a361', '2023-11-20 19:45:03.757000', '2024-11-20 19:44:39.808000', '5977e7ade6a9f43a2386ef4d53f23fb04653f0b021c83eecf4ed25ac2b2cb172', 'ff7307fd-e64d-46cb-8539-50f9ba14f66b');

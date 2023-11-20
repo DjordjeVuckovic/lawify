@@ -26,7 +26,7 @@ builder.Services
                 .AllowAnyMethod()); 
     });
 var app = builder.Build();
-
+app.MigrateDb<AgencyContext>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
