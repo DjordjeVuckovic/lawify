@@ -1,4 +1,4 @@
-package org.lawify.psp.card.consumers;
+package org.lawify.psp.crypto.consumers;
 
 import jakarta.jms.Message;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +19,21 @@ import java.util.Objects;
 public class PaymentConsumer {
     private final JmsTemplate jmsTemplate;
     @SneakyThrows
-    @JmsListener(destination = "card-service-queue")
-    public void receiveMessage(final Message message) {
-
+    @JmsListener(destination = "crypto-service-queue")
+    public void receiveMessage(final Message message){
         var converter = jmsTemplate.getMessageConverter();
         var paymentMessage = (PaymentMessage) Objects.requireNonNull(converter).fromMessage(message);
         System.out.println(paymentMessage);
 
         var response = new PaymentCommonResponse();
-        response.setAppName("card-service");
+        response.setAppName("crypto-service");
         response.setTimeStamp(new Date());
         response.setBankService(true);
 
         jmsTemplate.send(
                 message.getJMSReplyTo(),
                 session -> Objects.requireNonNull(jmsTemplate.getMessageConverter())
-                        .toMessage(response, session)
+                        .toMessage(response,session)
         );
     }
 }

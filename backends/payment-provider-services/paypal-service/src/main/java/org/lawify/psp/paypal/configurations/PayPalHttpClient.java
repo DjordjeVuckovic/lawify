@@ -1,3 +1,4 @@
+/*
 package org.lawify.psp.paypal.configurations;
 
 import org.springframework.stereotype.Component;
@@ -5,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PayPalHttpClient {
-  /*  private final HttpClient httpClient;
-    private final PayPalConfig*/
+  */
+/*  private final HttpClient httpClient;
+    private final PayPalConfig*//*
+
 }
+*/
