@@ -1,0 +1,47 @@
+version: '3.4'
+
+services:
+  sepbank1:
+    image: ${DOCKER_REGISTRY-}sepbank
+    build:
+      context: .
+      dockerfile: SepBank/Dockerfile
+    environment:
+      - CODE=120  # Set the environment variable CODE to 120 for sepbank1
+    depends_on:
+      - sqlserver  # Add a dependency on the sqlserver service
+    ports:
+      - "8080:80"  # Map host port 8080 to container port 80 for sepbank1
+
+  sepbank2:
+    image: ${DOCKER_REGISTRY-}sepbank
+    build:
+      context: .
+      dockerfile: SepBank/Dockerfile
+    environment:
+      - CODE=220  # Set the environment variable CODE to 220 for sepbank2
+    depends_on:
+      - sqlserver  # Add a dependency on the sqlserver service
+    ports:
+      - "8081:80"  # Map host port 8081 to container port 80 for sepbank2
+
+  seppcc:
+    image: ${DOCKER_REGISTRY-}seppcc
+    build:
+      context: .
+      dockerfile: SepPCC/Dockerfile
+    depends_on:
+      - sqlserver  # Add a dependency on the sqlserver service
+    ports:
+      - "8082:80"  # Map host port 8082 to container port 80 for seppcc
+      
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: A7367r@6+
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"  # Map host port 1433 to container port 1433 for sqlserver
+
+networks:
+  custom_network:  # Define a user-defined network
