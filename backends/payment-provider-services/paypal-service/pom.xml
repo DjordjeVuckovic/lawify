@@ -34,10 +34,15 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <version>6.0.13</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>rest-api-sdk</artifactId>
+            <version>1.14.0</version> <!-- Use the latest version -->
+        </dependency>
+        <!--        modules reference-->
         <dependency>
             <groupId>org.lawify.psp</groupId>
             <artifactId>building-blocks</artifactId>
@@ -49,11 +54,6 @@
             <artifactId>shared-contracts</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.paypal.sdk</groupId>
-            <artifactId>rest-api-sdk</artifactId>
-            <version>1.14.0</version> <!-- Use the latest version -->
         </dependency>
     </dependencies>
 </project>

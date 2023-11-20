@@ -6,3 +6,16 @@ export interface TransactionModel {
     amount: number;
     status: string;
 }
+
+export interface TransactionRequest {
+    transactionId: string;
+    subscriptionId: string;
+}
+
+export interface TransactionResponse {
+    timeStamp: Date;
+    redirectUrl: string;
+    correlationId: string;
+    appName: string;
+    bankService: boolean
+}

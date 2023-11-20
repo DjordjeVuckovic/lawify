@@ -20,7 +20,7 @@ import java.util.Objects;
 public class PaymentConsumer {
     private final JmsTemplate jmsTemplate;
     @SneakyThrows
-    @JmsListener(destination = "card-service")
+    @JmsListener(destination = "card-service-queue")
     public void receiveMessage(final Message message) {
 
         MessageConverter converter = jmsTemplate.getMessageConverter();
@@ -30,8 +30,7 @@ public class PaymentConsumer {
         PaymentCommonResponse response = new PaymentCommonResponse();
         response.setAppName("card-service");
         response.setTimeStamp(new Date());
-        response.setSuccess(true);
-        response.setMessage("Card consumer received a message.");
+        response.setBankService(true);
 
         jmsTemplate.send(
                 message.getJMSReplyTo(),

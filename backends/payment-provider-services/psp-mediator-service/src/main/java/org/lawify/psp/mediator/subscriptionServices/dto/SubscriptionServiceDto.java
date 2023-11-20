@@ -8,4 +8,5 @@ import java.util.UUID;
 public class SubscriptionServiceDto {
     public UUID id;
     public String name;
+    public String imageUrl;
 }

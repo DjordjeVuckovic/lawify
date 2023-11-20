@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.shared.utils.ResponseBuilder;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionRequest;
 import org.lawify.psp.mediator.transactions.dto.TransactionDto;
+import org.lawify.psp.mediator.transactions.dto.TransactionRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +34,12 @@ public class PaymentTransactionController {
     @GetMapping("{id}")
     public ResponseEntity<TransactionDto> get(@NonNull @PathVariable UUID id){
         return ResponseEntity.ok(transactionService.get(id));
+    }
+    @PostMapping("/payment")
+    public ResponseEntity<?> finalizeTransaction(
+            @RequestBody TransactionRequest request
+    ){
+        var transactionResponse = transactionService.processPayment(request.getTransactionId(),request.getSubscriptionId());
+        return ResponseEntity.ok(transactionResponse);
     }
 }

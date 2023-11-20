@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.subscriptionServices.dto.SubscriptionServiceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +23,7 @@ public class SubscriptionServiceController {
                         .builder()
                         .id(x.getId())
                         .name(x.getName())
+                        .imageUrl(x.getImageUrl())
                         .build()
                 ).toList();
         return ResponseEntity.ok(subs);

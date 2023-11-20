@@ -9,9 +9,13 @@
   font-size: 18px;
   border-radius: 26px;
   width: 10rem;
-}
-.button:hover{
-  cursor: pointer;
-  scale: 1.03;
-  transition: .1s ease-in-out;
+  &:disabled{
+    background: darkgrey;
+    cursor: not-allowed;
+  }
+  &:hover:enabled{
+    cursor: pointer;
+    scale: 1.03;
+    transition: .1s ease-in-out;
+  }
 }

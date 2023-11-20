@@ -1,4 +1,4 @@
-package org.lawify.psp.mediator.payments;
+package org.lawify.psp.mediator.transactions.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentRequest {
-    private UUID merchantId;
-    private BigDecimal Amount;
-    private UUID paymentId;
+public class TransactionRequest {
+    private UUID transactionId;
+    private UUID subscriptionId;
 }

@@ -1,14 +1,24 @@
 import {PaymentCard} from "../../shared/components/payment-card/payment-card.tsx";
-import {paymentOptions} from "./mock/payment-options.ts";
 import {Fragment, useState} from "react";
 import './payment-options.scss'
 import {Button} from "../../shared/components/button/button.tsx";
 import {PaymentOption} from "../../shared/model/common/payment-option.ts";
-
-export const PaymentOptions = () => {
+import {PaymentAmount} from "../payment-transaction/ui/payment-amount.tsx";
+export interface PaymentOptionsProps {
+    paymentOptions: PaymentOption[]
+    amount: number
+    onPayment: (paymentId: string) => void
+}
+export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptionsProps) => {
     const [selectedPayment, setSelectedPayment] = useState<PaymentOption | null>(null);
+    const payments = paymentOptions ?? paymentOptions
     const onClick = () => {
-        console.log("Clicked button")
+        console.log('click')
+        if (!selectedPayment) {
+           return
+        }
+        console.log(selectedPayment)
+        onPayment(selectedPayment.id);
     }
     const selectPaymentMethod = (method: PaymentOption) => {
         setSelectedPayment(method);
@@ -18,14 +28,15 @@ export const PaymentOptions = () => {
             <div className="payment-options-wrapper">
                 <h2>Choose payment methods:</h2>
                 <div className="payments-list">
-                    {paymentOptions.map((p, i) =>
+                    {payments.map((p, i) =>
                         <PaymentCard key={i}
                                      onClick={() => selectPaymentMethod(p)}
                                      isSelected={selectedPayment === p}
                                      payment={p}/>
                     )}
                 </div>
-                <Button onClick={onClick}>Proceed</Button>
+                <PaymentAmount amount={amount}/>
+                <Button onClick={onClick} disabled={selectedPayment === null}>Proceed</Button>
             </div>
         </Fragment>
     );

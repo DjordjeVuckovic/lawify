@@ -1,9 +1,14 @@
 package org.lawify.psp.mediator.transactions;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.lawify.psp.blocks.broker.IMessageBroker;
+import org.lawify.psp.contracts.requests.PaymentCommonResponse;
+import org.lawify.psp.contracts.requests.PaymentMessage;
 import org.lawify.psp.mediator.apiKeys.ApiKeyService;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
 import org.lawify.psp.mediator.shared.exceptions.ApiUnauthorized;
+import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceRepository;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionRequest;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionResponse;
 import org.lawify.psp.mediator.transactions.dto.TransactionDto;
@@ -23,6 +28,8 @@ public class PaymentTransactionService {
     private final PaymentTransactionRepository transactionRepository;
     private final MerchantRepository merchantRepository;
     private final ApiKeyService service;
+    private final SubscriptionServiceRepository subscriptionServiceRepository;
+    private final IMessageBroker messageBroker;
 
     public InitialTransactionResponse createInitial(InitialTransactionRequest request, String apiKey) {
         var merchant = merchantRepository.findByEmail(request.getMerchantUsername())
@@ -49,6 +56,19 @@ public class PaymentTransactionService {
                 .orElseThrow(() -> new ApiNotFound("Transaction not found"));
 
         return TransactionMapper.map(transaction);
+    }
+    @Transactional
+    public PaymentCommonResponse processPayment(UUID transactionId,UUID subscriptionId){
+        var transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new ApiNotFound("Transaction with id: "+ transactionId + "not found."));
+        var subService = subscriptionServiceRepository.findById(subscriptionId)
+                .orElseThrow(() -> new ApiNotFound("Payment option with id: "+ subscriptionId + "not found."));
+        transaction.setService(subService);
+        transactionRepository.save(transaction);
+        return messageBroker.sendAndReceive(
+                subService.getQueueName(),
+                new PaymentMessage(transaction.getAmount(),transaction.getMerchantId()),
+                PaymentCommonResponse.class);
     }
     private String buildFeUrl(UUID transactionId){
         return feUrl + "/payments?transaction=" + transactionId;

@@ -1,3 +1,5 @@
 export interface PaymentOption{
-    image: string
+    id: string
+    name: string
+    imageUrl: string
 }
