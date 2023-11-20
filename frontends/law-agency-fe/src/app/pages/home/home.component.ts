@@ -4,9 +4,9 @@ import {ProductCardComponent} from "../../shared/components/product-card/product
 import {ProductService} from "../../core/services/product.service";
 import {take} from "rxjs";
 import {ProductResponse} from "../../shared/model/response/product-response";
-import {HttpClient} from "@angular/common/http";
 import {OrderService} from "../../core/services/order.service";
 import {CreateOrderRequest} from "../../shared/model/requests/create-order-request";
+import {CreateOrderResponse} from "../../shared/model/response/create-order-response";
 
 @Component({
   selector: 'app-home',
@@ -44,8 +44,8 @@ export class HomeComponent implements OnInit {
     }
     this.orderService.createOrder(request)
       .pipe(take(1))
-      .subscribe(x => {
-        console.log(x)
+      .subscribe((response : CreateOrderResponse) => {
+        window.location.href = response.redirectUrl;
       })
 
     // TODO from agency be send http to psp {amount, merchant id, api key, order id}
