@@ -1,0 +1,6 @@
+version: '3.4'
+
+services:
+  sepbank2:
+    environment:
+      - CODE=220  # Override the environment variable CODE for sepbank2 to 220

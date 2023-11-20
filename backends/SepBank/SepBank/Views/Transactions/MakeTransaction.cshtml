@@ -1,0 +1,101 @@
+﻿@model SepBank.Models.DTO.MakeTransactionDTO
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Make Transaction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        form {
+            background: white;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<form asp-action="MakeTransaction">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h1>Payment amount: @Model.Amount</h1>
+    <div class="form-group">
+        <label class="control-label">Account number</label>
+        <input asp-for="SenderAccountNumber" class="form-control" />
+        <span asp-validation-for="SenderAccountNumber" class="text-danger"></span>
+    </div>
+    Expiration:
+    <div class="form-group">
+        <input asp-for="SenderExpirationMonth" class="form-control" />
+        <span asp-validation-for="SenderExpirationMonth" class="text-danger"></span>
+        <input asp-for="SenderExpirationYear" class="form-control" />
+        <span asp-validation-for="SenderExpirationYear" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Security number</label>
+        <input asp-for="SenderSecurityNumber" class="form-control" />
+        <span asp-validation-for="SenderSecurityNumber" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="ReceiverId" />
+    <input type="hidden" asp-for="Amount" />
+    <input type="hidden" asp-for="RequestStart" />
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+</body>
+</html>
