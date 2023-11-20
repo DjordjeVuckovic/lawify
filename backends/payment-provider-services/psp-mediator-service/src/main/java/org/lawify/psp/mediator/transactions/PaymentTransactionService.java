@@ -38,6 +38,7 @@ public class PaymentTransactionService {
                 .status(TransactionStatus.STARTED)
                 .merchantId(merchant.getId())
                 .timeStamp(new Date())
+                .amount(request.getAmount())
                 .build();
 
         transactionRepository.save(transaction);
@@ -50,7 +51,7 @@ public class PaymentTransactionService {
         return TransactionMapper.map(transaction);
     }
     private String buildFeUrl(UUID transactionId){
-        return feUrl + "/payments/transaction=" + transactionId;
+        return feUrl + "/payments?transaction=" + transactionId;
     }
 
 }

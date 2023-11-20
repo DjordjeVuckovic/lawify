@@ -17,17 +17,17 @@
   }
 }
 .navbar-menu-end{
-  gap: 2rem;
+  display: flex;
+  gap: 1.2rem;
   &:hover {
     cursor: pointer;
   }
 }
 .logo-container{
-  padding-bottom: 0;
   .image-logo{
+    width: 64px;
+    height: 64px;
     cursor: pointer;
-    width: 4rem;
-    height: 4rem;
     &:hover{
       transform: scale(1.02);
     }

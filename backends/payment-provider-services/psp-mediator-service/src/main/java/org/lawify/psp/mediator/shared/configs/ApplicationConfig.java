@@ -1,7 +1,6 @@
 package org.lawify.psp.mediator.shared.configs;
 
 import lombok.RequiredArgsConstructor;
-import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
 import org.lawify.psp.mediator.users.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
