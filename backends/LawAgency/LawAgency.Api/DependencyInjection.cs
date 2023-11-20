@@ -15,6 +15,7 @@ public  static class DependencyInjection
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         services.AddEndpointsApiExplorer();
         services.Configure<PspSettings>(configuration.GetSection(PspSettings.SectionName));
+        services.AddHttpClient();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddAuth(configuration);
         return services;

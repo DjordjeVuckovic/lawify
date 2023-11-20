@@ -1,22 +1,26 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {ProductCardComponent} from "../../shared/components/product-card/product-card.component";
 import {ProductService} from "../../core/services/product.service";
 import {take} from "rxjs";
 import {ProductResponse} from "../../shared/model/response/product-response";
 import {HttpClient} from "@angular/common/http";
+import {OrderService} from "../../core/services/order.service";
+import {CreateOrderRequest} from "../../shared/model/requests/create-order-request";
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ProductCardComponent],
-  providers: [ProductService],
+  providers: [ProductService,OrderService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   private readonly productsService = inject(ProductService)
-  products : ProductResponse[] =[]
+  private readonly orderService = inject(OrderService)
+  products: ProductResponse[] = []
+
   ngOnInit(): void {
     this.getProducts()
   }
@@ -28,9 +32,22 @@ export class HomeComponent implements OnInit{
         this.products = x
       })
   }
-  onBuy($event : ProductResponse){
-    console.log($event)
-    // TODO  Send http request  to agency backend
+
+  onBuy($event: ProductResponse) {
+    const productIdList:string[] = []
+    const request: CreateOrderRequest = {
+      buyerId: '9f20d390-ed57-46f8-afe9-8c0d3b83bf9e',
+      productIds: [
+        ...productIdList,
+        $event.id
+      ]
+    }
+    this.orderService.createOrder(request)
+      .pipe(take(1))
+      .subscribe(x => {
+        console.log(x)
+      })
+
     // TODO from agency be send http to psp {amount, merchant id, api key, order id}
     // TODO receive url and do redication
   }
