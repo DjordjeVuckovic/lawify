@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 using LawAgency.Api.Jwt;
+using LawAgency.Api.PspConfig;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,7 @@ public  static class DependencyInjection
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         services.AddEndpointsApiExplorer();
+        services.Configure<PspSettings>(configuration.GetSection(PspSettings.SectionName));
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddAuth(configuration);
         return services;
