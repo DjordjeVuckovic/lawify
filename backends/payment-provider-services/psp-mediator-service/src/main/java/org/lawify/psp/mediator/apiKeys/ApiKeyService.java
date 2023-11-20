@@ -4,13 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.apiKeys.dto.ApiKeyRequest;
 import org.lawify.psp.mediator.apiKeys.dto.ApiKeyResponse;
-import org.lawify.psp.mediator.crypto.CryptoService;
-import org.lawify.psp.mediator.crypto.converters.CryptoConverter;
-import org.lawify.psp.mediator.exceptions.ApiNotFound;
-import org.lawify.psp.mediator.merchants.MerchantRepository;
+import org.lawify.psp.mediator.shared.crypto.hash.HashService;
+import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
+import org.lawify.psp.mediator.users.merchants.MerchantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,13 +19,16 @@ import java.util.UUID;
 public class ApiKeyService {
     private final MerchantRepository merchantRepository;
     private final ApiKeyRepository apiKeyRepository;
+    private final HashService hashService;
     public ApiKeyResponse create(ApiKeyRequest apiKeyDto){
         var merchant = merchantRepository
                 .findById(apiKeyDto.merchantId)
                 .orElseThrow(() -> new ApiNotFound("Cannot find merchant with id " + apiKeyDto.merchantId));
 
+        var key = generateKey();
+        var hashKey = hashService.hashFixed(key);
         var apiKey = ApiKey.builder()
-                .key(generateKey())
+                .key(hashKey)
                 .createdAt(new Date())
                 .merchant(merchant)
                 .expiredAt(apiKeyDto.expiresAt)
@@ -33,12 +36,18 @@ public class ApiKeyService {
 
         var savedApiKey = apiKeyRepository.save(apiKey);
 
-        return new ApiKeyResponse(apiKey.getKey(),savedApiKey.getId());
+        return new ApiKeyResponse(key,savedApiKey.getId());
     }
 
-    public boolean isValid(String key){
-        var apiKey = apiKeyRepository.findByKey(key);
-        return apiKey.isPresent();
+    public boolean isValid(String key) {
+        var hash = hashService.hashFixed(key);
+        var keyDb =  apiKeyRepository.findByKey(hash);
+        return keyDb.isPresent();
+    }
+    public boolean contains(List<ApiKey> apiKeys, String apiKey){
+        return apiKeys
+                .stream()
+                .anyMatch(x -> hashService.verifyFixed(apiKey,x.getKey()));
     }
     private String generateKey(){
         return UUID.randomUUID() + "==" + UUID.randomUUID();

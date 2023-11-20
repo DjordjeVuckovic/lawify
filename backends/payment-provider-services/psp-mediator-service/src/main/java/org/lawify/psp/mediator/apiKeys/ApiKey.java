@@ -2,7 +2,7 @@ package org.lawify.psp.mediator.apiKeys;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.lawify.psp.mediator.merchants.Merchant;
+import org.lawify.psp.mediator.users.merchants.Merchant;
 
 import java.util.Date;
 import java.util.UUID;
