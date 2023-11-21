@@ -26,6 +26,10 @@ body {
   align-items: center;
   flex-wrap: wrap;
 }
+.justify-self{
+  align-self: center;
+  justify-self: center;
+}
 .flex-center-base{
   display: flex;
   justify-content: center;

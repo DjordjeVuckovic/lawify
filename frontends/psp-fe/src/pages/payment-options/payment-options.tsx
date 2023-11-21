@@ -3,7 +3,7 @@ import {Fragment, useState} from "react";
 import './payment-options.scss'
 import {Button} from "../../shared/components/button/button.tsx";
 import {PaymentOption} from "../../shared/model/common/payment-option.ts";
-import {PaymentAmount} from "../payment-transaction/ui/payment-amount.tsx";
+import {PaymentAmount} from "../payment-transaction/ui/payment-amount/payment-amount.tsx";
 export interface PaymentOptionsProps {
     paymentOptions: PaymentOption[]
     amount: number

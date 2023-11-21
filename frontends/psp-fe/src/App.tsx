@@ -4,6 +4,9 @@ import {Body} from "./shared/components/body";
 import {Route, Routes} from "react-router-dom";
 import {PaymentTransactionPage} from "./pages/payment-transaction/payment-transaction.page.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 const queryClient = new QueryClient();
 

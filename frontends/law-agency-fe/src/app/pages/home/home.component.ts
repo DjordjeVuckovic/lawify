@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
   onBuy($event: ProductResponse) {
     const productIdList:string[] = []
     const request: CreateOrderRequest = {
-      buyerId: '9f20d390-ed57-46f8-afe9-8c0d3b83bf9e',
+      buyerId: 'ea714e1f-f8f2-46a6-9b2e-2a3d9eefe3db',
       productIds: [
         ...productIdList,
         $event.id

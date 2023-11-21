@@ -11,7 +11,7 @@ services:
     depends_on:
       - sqlserver  # Add a dependency on the sqlserver service
     ports:
-      - "8080:80"  # Map host port 8080 to container port 80 for sepbank1
+      - "7000:80"  # Map host port 8080 to container port 80 for sepbank1
 
   sepbank2:
     image: ${DOCKER_REGISTRY-}sepbank
@@ -23,7 +23,7 @@ services:
     depends_on:
       - sqlserver  # Add a dependency on the sqlserver service
     ports:
-      - "8081:80"  # Map host port 8081 to container port 80 for sepbank2
+      - "7001:80"  # Map host port 8081 to container port 80 for sepbank2
 
   seppcc:
     image: ${DOCKER_REGISTRY-}seppcc
@@ -33,7 +33,7 @@ services:
     depends_on:
       - sqlserver  # Add a dependency on the sqlserver service
     ports:
-      - "8082:80"  # Map host port 8082 to container port 80 for seppcc
+      - "7002:80"  # Map host port 8082 to container port 80 for seppcc
       
   sqlserver:
     image: mcr.microsoft.com/mssql/server
@@ -42,6 +42,8 @@ services:
       ACCEPT_EULA: Y
     ports:
       - "1433:1433"  # Map host port 1433 to container port 1433 for sqlserver
+    volumes:
+      - bank-db-data:/var/opt/mssql
+volumes:
+  bank-db-data:
 
-networks:
-  custom_network:  # Define a user-defined network
