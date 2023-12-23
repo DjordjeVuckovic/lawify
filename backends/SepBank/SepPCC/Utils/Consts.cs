@@ -7,5 +7,8 @@
             { "120", "http://sepbank1:80" },
             { "220", "http://sepbank2:80" }
         };
+
+        public static readonly string IpsAPIUrl = "https://nbs.rs/QRcode/api/qr/v1/gen";
+        public static readonly string QrAPIUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={data}";
     }
 }
