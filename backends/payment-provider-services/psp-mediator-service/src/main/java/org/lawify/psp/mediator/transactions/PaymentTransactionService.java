@@ -3,8 +3,10 @@ package org.lawify.psp.mediator.transactions;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.blocks.broker.IMessageBroker;
+import org.lawify.psp.contracts.requests.CompleteOrderRequest;
 import org.lawify.psp.contracts.requests.PaymentCommonResponse;
 import org.lawify.psp.contracts.requests.PaymentMessage;
+import org.lawify.psp.contracts.requests.UpdateTransactionStatus;
 import org.lawify.psp.mediator.apiKeys.ApiKeyService;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
 import org.lawify.psp.mediator.shared.exceptions.ApiUnauthorized;
@@ -17,6 +19,7 @@ import org.lawify.psp.mediator.users.merchants.MerchantRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -67,11 +70,21 @@ public class PaymentTransactionService {
         transactionRepository.save(transaction);
         return messageBroker.sendAndReceive(
                 subService.getQueueName(),
-                new PaymentMessage(transaction.getAmount(),transaction.getMerchantId()),
+                new PaymentMessage(transaction.getAmount(),transaction.getMerchantId(),transaction.getId()),
                 PaymentCommonResponse.class);
     }
     private String buildFeUrl(UUID transactionId){
         return feUrl + "/payments?transaction=" + transactionId;
     }
 
+    public PaymentCommonResponse completePayment(String token) {
+        var response = messageBroker.sendAndReceive(
+                "paypal-service-queue-complete",
+                new CompleteOrderRequest(token),
+                PaymentCommonResponse.class);
+        return  response;
+    }
+    public void updateStatus(UpdateTransactionStatus request){
+      /*  var transaction = transactionRepository.findById(request.getTransactionId())*/
+    }
 }

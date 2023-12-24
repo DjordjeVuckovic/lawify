@@ -13,11 +13,9 @@ export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptio
     const [selectedPayment, setSelectedPayment] = useState<PaymentOption | null>(null);
     const payments = paymentOptions ?? paymentOptions
     const onClick = () => {
-        console.log('click')
         if (!selectedPayment) {
            return
         }
-        console.log(selectedPayment)
         onPayment(selectedPayment.id);
     }
     const selectPaymentMethod = (method: PaymentOption) => {

@@ -29,6 +29,34 @@ services:
       - psp-mediator-data:/var/lib/postgresql/data
     networks:
       psp-net:
+  paypal-db:
+    image: postgres
+    container_name: paypal-db
+    restart: always
+    ports:
+      - "5402:5432"
+    environment:
+      POSTGRES_DB: paypal-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - paypal-data:/var/lib/postgresql/data
+    networks:
+      psp-net:
+  crypto-db:
+    image: postgres
+    container_name: crypto-db
+    restart: always
+    ports:
+      - "5403:5432"
+    environment:
+      POSTGRES_DB: crypto-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - crypto-data:/var/lib/postgresql/data
+    networks:
+      psp-net:
   psp-activemq:
     image: rmohr/activemq
     ports:
@@ -53,6 +81,10 @@ volumes:
   bank-app-data:
     driver: local
   psp-mediator-data:
+    driver: local
+  paypal-data:
+    driver: local
+  crypto-data:
     driver: local
   psp-activemq-data:
     driver: local

@@ -3,6 +3,7 @@ package org.lawify.psp.mediator.transactions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.shared.utils.ResponseBuilder;
+import org.lawify.psp.mediator.transactions.dto.FinishTransactionRequest;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionRequest;
 import org.lawify.psp.mediator.transactions.dto.TransactionDto;
 import org.lawify.psp.mediator.transactions.dto.TransactionRequest;
@@ -40,6 +41,13 @@ public class PaymentTransactionController {
             @RequestBody TransactionRequest request
     ){
         var transactionResponse = transactionService.processPayment(request.getTransactionId(),request.getSubscriptionId());
+        return ResponseEntity.ok(transactionResponse);
+    }
+    @PostMapping("/complete-transaction")
+    public ResponseEntity<?> completeTransaction(
+            @RequestBody FinishTransactionRequest request
+            ){
+        var transactionResponse = transactionService.completePayment(request.getToken());
         return ResponseEntity.ok(transactionResponse);
     }
 }
