@@ -68,6 +68,30 @@ namespace SepBank.Controllers
             return Ok(transactionStatus.IsSuccess);
         }
 
+        [HttpGet("RequestTransactionForAccountNumber")]
+        public IActionResult RequestTransactionForAccountNumber([FromQuery] string accountNumber, [FromQuery] double amount)
+        {
+            if (amount <= 0)
+            {
+                return BadRequest("Invalid amount.");
+            }
+
+            var account = _context.Accounts.ToList().Where(x => x.AccountNumber == accountNumber || PadWithZeros(x.AccountNumber) == accountNumber).FirstOrDefault();
+
+            if(account == null)
+            {
+                return BadRequest("Account doesn't exist.");
+            }
+
+            var transactionId = Guid.NewGuid();
+            var timestamp = DateTime.UtcNow;
+
+            // Store the transaction request information
+            _transactionRequests[transactionId] = (timestamp, account.Id, amount);
+
+            return Ok(transactionId);
+        }
+
         [HttpGet("RequestTransaction")]
         public IActionResult RequestTransaction([FromQuery] Guid receiverId, [FromQuery] double amount)
         {
@@ -304,6 +328,26 @@ namespace SepBank.Controllers
         private bool TransactionExists(Guid id)
         {
             return (_context.Transactions?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private string PadWithZeros(string input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            // Check if the input length is already 18 or more
+            if (input.Length >= 18)
+            {
+                return input;
+            }
+
+            // Calculate how many zeros are needed
+            int zerosNeeded = 18 - input.Length;
+
+            // Insert zeros after the third character
+            return input.Insert(3, new string('0', zerosNeeded));
         }
     }
 }

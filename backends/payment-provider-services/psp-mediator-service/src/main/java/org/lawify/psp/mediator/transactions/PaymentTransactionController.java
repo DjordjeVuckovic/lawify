@@ -34,7 +34,7 @@ public class PaymentTransactionController {
     }
     @GetMapping("{id}")
     public ResponseEntity<TransactionDto> get(@NonNull @PathVariable UUID id){
-        return ResponseEntity.ok(transactionService.get(id));
+        return ResponseEntity.ok(transactionService.getStartedTransaction(id));
     }
     @PostMapping("/payment")
     public ResponseEntity<?> finalizeTransaction(

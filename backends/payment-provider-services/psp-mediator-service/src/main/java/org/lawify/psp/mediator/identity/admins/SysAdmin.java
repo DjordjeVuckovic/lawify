@@ -1,12 +1,11 @@
-package org.lawify.psp.mediator.users.admins;
+package org.lawify.psp.mediator.identity.admins;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.lawify.psp.mediator.users.PspRole;
-import org.lawify.psp.mediator.users.UserBase;
+import org.lawify.psp.mediator.identity.PspRole;
+import org.lawify.psp.mediator.identity.UserBase;
 
 @Entity
 @Table(name = "sys_admins", indexes = {

@@ -1,4 +1,4 @@
-package org.lawify.psp.mediator.users.admins;
+package org.lawify.psp.mediator.identity.admins;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

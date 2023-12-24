@@ -10,8 +10,11 @@ import {ProductResponse} from "../../shared/model/response/product-response";
 export class ProductService {
   private readonly http = inject(HttpClient)
   private readonly baseUrl = 'https://localhost:7275/api/products'
-  constructor() { }
-  getProducts():Observable<ProductResponse[]>{
-    return this.http.get<ProductResponse[]>(`${this.baseUrl}`,httpOptions)
+
+  constructor() {
+  }
+
+  getProducts(): Observable<ProductResponse[]> {
+    return this.http.get<ProductResponse[]>(`${this.baseUrl}`, httpOptions)
   }
 }

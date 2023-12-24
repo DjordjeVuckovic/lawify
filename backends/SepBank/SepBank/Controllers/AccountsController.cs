@@ -163,6 +163,14 @@ namespace SepBank.Controllers
           return (_context.Accounts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
+        [HttpGet("GetAccountData")]
+        public IActionResult MakePCCTransaction(string accountNumber)
+        {
+            var accountInfo = _context.Accounts.Where(x => x.AccountNumber == accountNumber).Select(x => $"{x.AccountNumber};{x.HolderName}").FirstOrDefault();
+
+            return Ok(accountInfo);
+        }
+
         [HttpPost("CreateAccount")]
         public async Task<IActionResult> CreateAccount([FromBody] AccountCreationDTO dto)
         {

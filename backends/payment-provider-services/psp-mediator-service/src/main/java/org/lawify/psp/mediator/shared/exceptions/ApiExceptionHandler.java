@@ -1,5 +1,6 @@
 package org.lawify.psp.mediator.shared.exceptions;
 
+import org.lawify.psp.mediator.transactions.erros.InvalidTransactionStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -49,5 +50,15 @@ public class ApiExceptionHandler {
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
         return new ResponseEntity<>(payload, unauthorized);
+    }
+    @ExceptionHandler(value = {InvalidTransactionStatus.class})
+    public ResponseEntity<Object> handleInvalidTransactionStatus(InvalidTransactionStatus e){
+        HttpStatus conflict = HttpStatus.CONFLICT;
+        ApiException payload = new ApiException(
+                e.getMessage(),
+                conflict,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(payload, conflict);
     }
 }

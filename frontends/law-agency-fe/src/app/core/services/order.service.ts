@@ -9,11 +9,14 @@ import {CreateOrderResponse} from "../../shared/model/response/create-order-resp
   providedIn: 'root'
 })
 export class OrderService {
-private readonly http = inject(HttpClient)
+  private readonly http = inject(HttpClient)
   private readonly baseUrl = 'https://localhost:7275/api/orders'
-  constructor() { }
-  createOrder(request: CreateOrderRequest):Observable<CreateOrderResponse>{
-  return this.http.post<CreateOrderResponse>(`${this.baseUrl}`,request,httpOptions)
+
+  constructor() {
+  }
+
+  createOrder(request: CreateOrderRequest): Observable<CreateOrderResponse> {
+    return this.http.post<CreateOrderResponse>(`${this.baseUrl}`, request, httpOptions)
   }
 
 }

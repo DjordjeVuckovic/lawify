@@ -34,6 +34,7 @@ public class PaymentTransaction {
     public String statusToString(){
          return switch (status){
             case STARTED -> "Started";
+            case COMPLETED -> "Completed";
             case SUCCESS -> "Success";
             case FAILED -> "Fail";
         };
