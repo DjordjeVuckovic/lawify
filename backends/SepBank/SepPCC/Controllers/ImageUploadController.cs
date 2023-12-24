@@ -40,6 +40,8 @@ namespace SepPCC.Controllers
         [HttpPost]
         public async Task<IActionResult> ValidateQR(IFormFile image)
         {
+            // Upload image to cloudinary
+
             if (image == null || image.Length == 0)
                 return BadRequest("No image provided");
 
@@ -53,20 +55,41 @@ namespace SepPCC.Controllers
             if (uploadResult.Error != null)
                 return BadRequest(uploadResult.Error.Message);
 
+            // Scan QR code from image
             string qrImageUrl = uploadResult.SecureUrl.ToString();
             string encodedUrl = HttpUtility.UrlEncode(qrImageUrl);
 
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(Consts.QrCheckUrl.Replace("{encodedUrl}", encodedUrl));
-            string jsonResponse = await response.Content.ReadAsStringAsync();
-            IPSGenerator ipsGenerator = DeserializeIPSGenerator(jsonResponse);
-
-            if (ipsGenerator == null)
+            using (var client = new HttpClient())
             {
-                return BadRequest("QR code not formatted well.");
-            }
+                HttpResponseMessage response = await client.GetAsync(Consts.QrCheckUrl.Replace("{encodedUrl}", encodedUrl));
+                string jsonResponse = await response.Content.ReadAsStringAsync();
 
-            return Ok(ipsGenerator);
+                // Check if QR code from image is valid
+                IPSGenerator ipsGenerator = DeserializeIPSGenerator(jsonResponse);
+
+                if (ipsGenerator == null)
+                {
+                    return BadRequest("QR code not formatted well.");
+                }
+
+                // Create transaction request
+                var receiverBankId = ipsGenerator.R.Substring(0, 3);
+
+                string url = Consts.BankIds[receiverBankId];
+                string apiUrl = $"{url}/RequestTransactionForAccountNumber?accountNumber={ipsGenerator.R}&amount={ipsGenerator.I.Substring(3).Replace(',', '.')}";
+
+                try
+                {
+                    response = await client.GetAsync(apiUrl);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(response.Content.ReadAsStringAsync());
+                }
+            }
         }
 
         private static IPSGenerator DeserializeIPSGenerator(string jsonString)
