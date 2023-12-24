@@ -4,6 +4,8 @@ using System.Text.Json;
 using System.Text;
 using System.Globalization;
 using System.Reflection;
+using ZXing;
+using System.Drawing;
 
 namespace SepPCC.Controllers
 {
@@ -134,6 +136,8 @@ namespace SepPCC.Controllers
         public string SF { get; set; } = "189";
         public string S { get; set; } = "Transakcija po nalogu gradjana";
         public string RO { get; set; } = "";
+
+        public IPSGenerator() { }
 
         public IPSGenerator(string receiverAccountNumber, string receiverAddress, double amount)
         {
