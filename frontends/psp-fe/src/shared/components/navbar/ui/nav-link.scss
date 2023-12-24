@@ -1,8 +1,17 @@
+@mixin on-hover {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(4px);
+  color: var(--main);
+}
+
 .link{
   color: var(--text-color);
   padding: .05rem;
   text-decoration: none;
   position: relative;
+  display: flex;
+  justify-content: center;
+  gap: .3rem;
   &:hover{
     cursor: pointer;
   }
@@ -21,5 +30,25 @@
 
   &:hover::after {
     width: 100%;
+  }
+
+  &.hover{
+    .link__icon{
+      @include on-hover();
+    }
+  }
+}
+.button-as-link{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  outline: none;
+  border: none;
+  &:hover{
+    .button-as-link__icon{
+      @include on-hover();
+    }
   }
 }

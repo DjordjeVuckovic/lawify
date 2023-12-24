@@ -117,8 +117,8 @@ export const SignUpPage = () => {
                                 {<BsBank />}
                             </i>
                         </div>
-                        {errors.password?.message && (
-                            <FieldError error={errors.password.message}/>
+                        {errors.bankAccount?.message && (
+                            <FieldError error={errors.bankAccount.message}/>
                         )}
                     </div>
 
@@ -137,7 +137,7 @@ export const SignUpPage = () => {
                                 })}
                                 placeholder="Enter your password"
                             />
-                            <i onClick={() => setConfirmPasswordShown(true)}>
+                            <i onClick={togglePasswordVisibility}>
                                 {passwordShown ? <FaEyeSlash size={24}/> : <FaEye size={24}/>}
                             </i>
                         </div>
@@ -161,8 +161,8 @@ export const SignUpPage = () => {
                                 })}
                                 placeholder="Enter your confiremd password"
                             />
-                            <i onClick={togglePasswordVisibility}>
-                                {passwordShown ? <FaEyeSlash size={24}/> : <FaEye size={24}/>}
+                            <i onClick={() => setConfirmPasswordShown(true)}>
+                                {passwordConfirmShown ? <FaEyeSlash size={24}/> : <FaEye size={24}/>}
                             </i>
                         </div>
                         {errors.confirmPassword?.message && (
