@@ -20,7 +20,8 @@ import java.util.function.Function;
 public class JwtService implements IJwtService {
     @Value("${token.jwt.key}")
     private String secretKey;
-    private static final long TOKEN_DURATION_MS = 1000 * 60 * 15;
+    @Value("#{T(java.lang.Long).parseLong('${token.jwt.duration}')}")
+    private long durationMs;
     @Override
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -30,7 +31,7 @@ public class JwtService implements IJwtService {
     public String generateToken(UserBase user) {
         HashMap<String, Object> claims = generateExtraClaims(user);
         claims.put("typ","Bearer");
-        return generateBaseToken(claims,user, TOKEN_DURATION_MS);
+        return generateBaseToken(claims,user, durationMs);
     }
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -39,7 +40,8 @@ public class JwtService implements IJwtService {
     }
     private String generateBaseToken(
             Map<String,Object> extraClaims,
-            UserDetails userDetails, long duration){
+            UserDetails userDetails,
+            long duration){
         return Jwts
                 .builder()
                 .setClaims(extraClaims)

@@ -22,7 +22,7 @@ public class MerchantService {
         if (repository.findByName(request.getName()).isPresent()) {
             throw new ApiBadRequest("Merchant with name: " + request.getName() + "already exists");
         }
-        if(repository.findByEmail(request.getName()).isPresent()){
+        if(repository.findByEmail(request.getUsername()).isPresent()){
             throw new ApiBadRequest("Merchant with email: " + request.getUsername() + "already exists");
 
         }
