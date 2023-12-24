@@ -1,4 +1,4 @@
-package org.lawify.psp.crypto.mq;
+package org.lawify.psp.crypto.shared.mq;
 
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;

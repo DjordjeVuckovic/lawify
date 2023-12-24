@@ -20,7 +20,6 @@ export const PaymentTransactionPage = () => {
     };
     const [searchParams] = useSearchParams();
     const transactionId = searchParams.get('transaction');
-    console.log(transactionId)
     const transactionQuery = useQuery({
         queryKey: ['transaction', transactionId],
         queryFn: () => fetchTransaction(transactionId),
@@ -39,7 +38,13 @@ export const PaymentTransactionPage = () => {
         onSuccess: (response: TransactionResponse) => {
             console.log("success")
             console.log(response)
-            openModal(response)
+            if(response.bankService)
+            {
+                openModal(response)
+                return
+            }
+            window.location.replace(response.redirectUrl);
+
         }
     });
     if (transactionQuery.isLoading || paymentOptionsQuery.isLoading) return <div>Loading...</div>;

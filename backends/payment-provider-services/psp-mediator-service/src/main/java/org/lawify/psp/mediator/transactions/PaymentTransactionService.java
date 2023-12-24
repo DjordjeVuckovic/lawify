@@ -3,9 +3,12 @@ package org.lawify.psp.mediator.transactions;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.blocks.broker.IMessageBroker;
+import org.lawify.psp.contracts.requests.CompleteOrderRequest;
 import org.lawify.psp.contracts.requests.PaymentCommonResponse;
 import org.lawify.psp.contracts.requests.PaymentMessage;
+import org.lawify.psp.contracts.requests.UpdateTransactionStatus;
 import org.lawify.psp.mediator.apiKeys.ApiKeyService;
+import org.lawify.psp.mediator.shared.converters.StatusConverter;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
 import org.lawify.psp.mediator.shared.exceptions.ApiUnauthorized;
 import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceRepository;
@@ -69,15 +72,29 @@ public class PaymentTransactionService {
         var subService = subscriptionServiceRepository.findById(subscriptionId)
                 .orElseThrow(() -> new ApiNotFound("Payment option with id: "+ subscriptionId + "not found."));
         transaction.setService(subService);
-        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setStatus(TransactionStatus.PENDING);
         transactionRepository.save(transaction);
         return messageBroker.sendAndReceive(
                 subService.getQueueName(),
-                new PaymentMessage(transaction.getAmount(),transaction.getMerchantId()),
+                new PaymentMessage(transaction.getAmount(),transaction.getMerchantId(),transaction.getId()),
                 PaymentCommonResponse.class);
     }
     private String buildFeUrl(UUID transactionId){
         return feUrl + "/payments?transaction=" + transactionId;
     }
 
+    public PaymentCommonResponse completePayment(String token) {
+        var response = messageBroker.sendAndReceive(
+                "paypal-service-queue-complete",
+                new CompleteOrderRequest(token),
+                PaymentCommonResponse.class);
+        return  response;
+    }
+    public void updateStatus(UpdateTransactionStatus request){
+        var transaction = transactionRepository.findById(request.getTransactionId())
+                .orElseThrow(()-> new ApiNotFound("Transaction not found!"));
+        var status = StatusConverter.convertToStatus(request.status);
+        transaction.setStatus(status);
+        transactionRepository.save(transaction);
+    }
 }

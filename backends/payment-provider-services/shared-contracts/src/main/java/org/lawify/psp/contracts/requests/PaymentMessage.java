@@ -11,4 +11,5 @@ import java.util.UUID;
 public class PaymentMessage {
     public BigDecimal amount;
     public UUID merchantId;
+    public UUID transactionId;
 }

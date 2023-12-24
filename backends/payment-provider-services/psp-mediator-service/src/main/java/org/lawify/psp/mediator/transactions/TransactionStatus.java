@@ -2,7 +2,7 @@ package org.lawify.psp.mediator.transactions;
 
 public enum TransactionStatus {
     STARTED,
-    COMPLETED,
+    PENDING,
     SUCCESS,
     FAILED
 }

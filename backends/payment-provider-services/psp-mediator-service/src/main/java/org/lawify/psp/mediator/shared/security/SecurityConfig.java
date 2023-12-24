@@ -14,8 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -41,8 +39,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS)
                                 .permitAll()
                                 .anyRequest()
-                                //.permitAll()
-                                .authenticated()
+                                .permitAll()
+                                //.authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
