@@ -8,6 +8,7 @@ import org.lawify.psp.contracts.requests.PaymentCommonResponse;
 import org.lawify.psp.contracts.requests.PaymentMessage;
 import org.lawify.psp.contracts.requests.UpdateTransactionStatus;
 import org.lawify.psp.mediator.apiKeys.ApiKeyService;
+import org.lawify.psp.mediator.shared.converters.StatusConverter;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
 import org.lawify.psp.mediator.shared.exceptions.ApiUnauthorized;
 import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceRepository;
@@ -20,7 +21,6 @@ import org.lawify.psp.mediator.identity.merchants.MerchantRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -72,7 +72,7 @@ public class PaymentTransactionService {
         var subService = subscriptionServiceRepository.findById(subscriptionId)
                 .orElseThrow(() -> new ApiNotFound("Payment option with id: "+ subscriptionId + "not found."));
         transaction.setService(subService);
-        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setStatus(TransactionStatus.PENDING);
         transactionRepository.save(transaction);
         return messageBroker.sendAndReceive(
                 subService.getQueueName(),
@@ -91,6 +91,10 @@ public class PaymentTransactionService {
         return  response;
     }
     public void updateStatus(UpdateTransactionStatus request){
-      /*  var transaction = transactionRepository.findById(request.getTransactionId())*/
+        var transaction = transactionRepository.findById(request.getTransactionId())
+                .orElseThrow(()-> new ApiNotFound("Transaction not found!"));
+        var status = StatusConverter.convertToStatus(request.status);
+        transaction.setStatus(status);
+        transactionRepository.save(transaction);
     }
 }

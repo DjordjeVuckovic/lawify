@@ -30,3 +30,6 @@ hash:
 
 api-key:
   encrypt: ${ENCRYPT_KEY:6091297EBCE882EC01F71E4AF3D0812A205045AB892F75769FB1F7B11BAF47C7}
+
+coingate:
+  url: https://api-sandbox.coingate.com/v2/orders

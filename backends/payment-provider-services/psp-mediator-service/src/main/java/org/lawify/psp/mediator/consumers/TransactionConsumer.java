@@ -22,7 +22,7 @@ public class TransactionConsumer {
     public void receiveMessage(final Message message){
         MessageConverter converter = jmsTemplate.getMessageConverter();
         var updateTransactionStatus = (UpdateTransactionStatus) Objects.requireNonNull(converter).fromMessage(message);
-    /*   transactionService.updateStatus(UpdateTransactionStatus);*/
+       transactionService.updateStatus(updateTransactionStatus);
         System.out.println(updateTransactionStatus);
       /*  var paypalConnection = paypalConnectionService
                 .getPayPalConnectionByUserId(paymentMessage.merchantId);

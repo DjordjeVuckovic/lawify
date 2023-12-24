@@ -6,10 +6,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.lawify.psp.contracts.requests.PaymentCommonResponse;
 import org.lawify.psp.contracts.requests.PaymentMessage;
-import org.lawify.psp.crypto.accounts.AccountRepository;
-import org.lawify.psp.crypto.accounts.AccountService;
-import org.lawify.psp.crypto.accounts.dtos.CreateAccountRequest;
 import org.lawify.psp.crypto.orders.OrderService;
+import org.lawify.psp.crypto.orders.dtos.CreateOrderRequest;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -23,14 +21,21 @@ import java.util.Objects;
 public class PaymentConsumer {
     private final JmsTemplate jmsTemplate;
     private final OrderService orderService;
-    private final AccountService accountService;
+
     @SneakyThrows
     @JmsListener(destination = "crypto-service-queue")
     public void receiveMessage(final Message message){
         var converter = jmsTemplate.getMessageConverter();
         var paymentMessage = (PaymentMessage) Objects.requireNonNull(converter).fromMessage(message);
-        System.out.println(paymentMessage);
-        var orderResponse = orderService.createOrder();
+        var request = CreateOrderRequest.builder()
+                .priceCurrency("USD")
+                .callbackUrl("https://2b9f-188-2-101-162.ngrok-free.app/api/v1/transactions/notify")
+                .receiveCurrency("BTC")
+                .transactionId(paymentMessage.transactionId)
+                .priceAmount(0.11)
+                .merchantId(paymentMessage.merchantId)
+                .build();
+        var orderResponse = orderService.createOrder(request);
         var response = new PaymentCommonResponse();
         response.setAppName("crypto-service");
         response.setRedirectUrl(orderResponse.getPaymentUrl());
