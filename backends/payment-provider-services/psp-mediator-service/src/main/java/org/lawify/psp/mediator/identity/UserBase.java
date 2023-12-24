@@ -1,4 +1,4 @@
-package org.lawify.psp.mediator.users;
+package org.lawify.psp.mediator.identity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,10 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -29,9 +26,13 @@ public abstract class UserBase implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (var role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+            authorities.add(new SimpleGrantedAuthority(role.name()));
         }
         return authorities;
+    }
+
+    public List<String> getRoleNames() {
+        return this.roles.stream().map(Enum::name).toList();
     }
 
     @Override

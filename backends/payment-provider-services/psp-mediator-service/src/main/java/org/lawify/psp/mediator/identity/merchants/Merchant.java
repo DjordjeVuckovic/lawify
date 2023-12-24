@@ -1,4 +1,4 @@
-package org.lawify.psp.mediator.users.merchants;
+package org.lawify.psp.mediator.identity.merchants;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.lawify.psp.mediator.apiKeys.ApiKey;
 import org.lawify.psp.mediator.shared.crypto.converters.CryptoConverter;
 import org.lawify.psp.mediator.subscriptionServices.SubscriptionService;
-import org.lawify.psp.mediator.users.PspRole;
-import org.lawify.psp.mediator.users.UserBase;
+import org.lawify.psp.mediator.identity.PspRole;
+import org.lawify.psp.mediator.identity.UserBase;
 
 import java.util.List;
 

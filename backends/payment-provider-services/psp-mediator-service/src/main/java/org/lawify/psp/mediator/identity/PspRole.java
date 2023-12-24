@@ -1,4 +1,4 @@
-package org.lawify.psp.mediator.users;
+package org.lawify.psp.mediator.identity;
 
 public enum PspRole {
     MERCHANT,

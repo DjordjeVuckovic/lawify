@@ -1,4 +1,4 @@
-package org.lawify.psp.mediator.users.merchants.dto;
+package org.lawify.psp.mediator.identity.merchants.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MerchantRequest {
+public class RegisterMerchantRequest {
     private String username;
     private String password;
     private String name;

@@ -6,7 +6,7 @@ import org.lawify.psp.mediator.apiKeys.dto.ApiKeyRequest;
 import org.lawify.psp.mediator.apiKeys.dto.ApiKeyResponse;
 import org.lawify.psp.mediator.shared.crypto.hash.HashService;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
-import org.lawify.psp.mediator.users.merchants.MerchantRepository;
+import org.lawify.psp.mediator.identity.merchants.MerchantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

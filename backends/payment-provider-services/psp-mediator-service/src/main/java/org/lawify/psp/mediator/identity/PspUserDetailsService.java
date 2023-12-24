@@ -1,16 +1,16 @@
-package org.lawify.psp.mediator.users;
+package org.lawify.psp.mediator.identity;
 
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
-import org.lawify.psp.mediator.users.admins.SysAdminRepository;
-import org.lawify.psp.mediator.users.merchants.MerchantRepository;
+import org.lawify.psp.mediator.identity.admins.SysAdminRepository;
+import org.lawify.psp.mediator.identity.merchants.MerchantRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class PspUserDetailsService implements UserDetailsService {
     private final SysAdminRepository adminRepository;
     private final MerchantRepository merchantRepository;
 

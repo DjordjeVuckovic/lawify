@@ -12,8 +12,9 @@ import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceRepositor
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionRequest;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionResponse;
 import org.lawify.psp.mediator.transactions.dto.TransactionDto;
+import org.lawify.psp.mediator.transactions.erros.InvalidTransactionStatus;
 import org.lawify.psp.mediator.transactions.mapper.TransactionMapper;
-import org.lawify.psp.mediator.users.merchants.MerchantRepository;
+import org.lawify.psp.mediator.identity.merchants.MerchantRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -51,9 +52,13 @@ public class PaymentTransactionService {
         transactionRepository.save(transaction);
         return new InitialTransactionResponse(buildFeUrl(transaction.getId()),transaction.getId());
     }
-    public TransactionDto get(UUID id){
+    public TransactionDto getStartedTransaction(UUID id){
         var transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ApiNotFound("Transaction not found"));
+
+        if(transaction.getStatus() != TransactionStatus.STARTED){
+            throw new InvalidTransactionStatus("Transaction already processed");
+        }
 
         return TransactionMapper.map(transaction);
     }
@@ -64,6 +69,7 @@ public class PaymentTransactionService {
         var subService = subscriptionServiceRepository.findById(subscriptionId)
                 .orElseThrow(() -> new ApiNotFound("Payment option with id: "+ subscriptionId + "not found."));
         transaction.setService(subService);
+        transaction.setStatus(TransactionStatus.COMPLETED);
         transactionRepository.save(transaction);
         return messageBroker.sendAndReceive(
                 subService.getQueueName(),

@@ -1,7 +1,6 @@
-package org.lawify.psp.mediator.users.merchants;
+package org.lawify.psp.mediator.identity.merchants;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

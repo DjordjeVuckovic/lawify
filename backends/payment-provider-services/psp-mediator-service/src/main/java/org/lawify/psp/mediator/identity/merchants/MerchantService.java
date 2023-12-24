@@ -1,10 +1,11 @@
-package org.lawify.psp.mediator.users.merchants;
+package org.lawify.psp.mediator.identity.merchants;
 
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.shared.crypto.hash.HashService;
 import org.lawify.psp.mediator.shared.exceptions.ApiBadRequest;
-import org.lawify.psp.mediator.users.merchants.dto.MerchantRequest;
+import org.lawify.psp.mediator.identity.merchants.dto.RegisterMerchantRequest;
 import org.lawify.psp.mediator.shared.utils.validators.BankAccountValidator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,9 +13,9 @@ import org.springframework.stereotype.Service;
 public class MerchantService {
     private final MerchantRepository repository;
     private final BankAccountValidator bankAccountValidator;
-    private final HashService hashService;
+    private final PasswordEncoder passwordEncoder;
 
-    public Merchant create(MerchantRequest request) {
+    public Merchant create(RegisterMerchantRequest request) {
         if (!bankAccountValidator.test(request.getBankAccount())) {
             throw new ApiBadRequest("Bank account is not valid");
         }
@@ -29,7 +30,7 @@ public class MerchantService {
                 request.getName(),
                 request.getBankAccount(),
                 request.getUsername(),
-                hashService.hash(request.getPassword())
+                passwordEncoder.encode(request.getPassword())
         );
         return repository.save(newMerchant);
     }
