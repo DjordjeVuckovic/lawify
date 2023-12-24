@@ -1,9 +1,8 @@
 package org.lawify.psp.mediator.identity.merchants;
 
 import lombok.RequiredArgsConstructor;
-import org.lawify.psp.mediator.shared.crypto.hash.HashService;
-import org.lawify.psp.mediator.shared.exceptions.ApiBadRequest;
 import org.lawify.psp.mediator.identity.merchants.dto.RegisterMerchantRequest;
+import org.lawify.psp.mediator.shared.exceptions.ApiBadRequest;
 import org.lawify.psp.mediator.shared.utils.validators.BankAccountValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

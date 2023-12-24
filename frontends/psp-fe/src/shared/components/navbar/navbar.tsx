@@ -11,7 +11,7 @@ export const Navbar = () => {
                  <img src={logo} alt={'logo'} className={'image-logo'} loading='eager' onClick={() => navigate('')}/>
              </div>
              <div className='flex-center navbar-menu-middle'>
-                 <NavLink title={'Payments'} url={'/payments'}/>
+                 <NavLink title={'Home'} url={''}/>
              </div>
              <div className='navbar-menu-end'>
                  <NavLink title={'Sign In'} url={'/sign-in'}/>

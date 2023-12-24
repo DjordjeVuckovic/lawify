@@ -1,0 +1,48 @@
+@import "./../../sass/mixins";
+.sign-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .sign-form {
+    display: flex;
+    flex-direction: column;
+    width: 35dvw;
+    margin-top: 2rem;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 1px 2px 8px 1px var(--main);
+    background: rgba(51, 51, 51, 0.17);
+    position: relative;
+    .sign-button{
+      margin-top: 1rem;
+      width: 100%;
+      @include icon-button;
+    }
+  }
+}
+
+.logo-section{
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  justify-content: center;
+  align-items: center;
+  h2{
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--main);
+  }
+}
+.link-sign{
+  margin-top: 1rem;
+  outline: none;
+  border: none;
+  text-align: center;
+  background: transparent;
+  padding: .1rem;
+  color: #3D5CB8FF;
+  &:hover{
+    color: #1836ad;
+    cursor: pointer;
+  }
+}
