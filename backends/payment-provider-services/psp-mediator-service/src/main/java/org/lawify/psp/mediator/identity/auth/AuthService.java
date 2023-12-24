@@ -7,7 +7,6 @@ import org.lawify.psp.mediator.identity.admins.RegisterAdminRequest;
 import org.lawify.psp.mediator.identity.admins.SysAdminService;
 import org.lawify.psp.mediator.identity.merchants.MerchantService;
 import org.lawify.psp.mediator.identity.merchants.dto.RegisterMerchantRequest;
-import org.lawify.psp.mediator.shared.exceptions.ApiBadRequest;
 import org.lawify.psp.mediator.shared.exceptions.ApiUnauthorized;
 import org.lawify.psp.mediator.shared.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;

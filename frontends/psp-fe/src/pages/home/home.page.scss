@@ -1,0 +1,16 @@
+.landing-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  .landing-header{
+    h1{
+      color: var(--main);
+    }
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+  }
+}
