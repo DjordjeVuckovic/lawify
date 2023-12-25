@@ -24,20 +24,5 @@ public class TransactionConsumer {
         var updateTransactionStatus = (UpdateTransactionStatus) Objects.requireNonNull(converter).fromMessage(message);
        transactionService.updateStatus(updateTransactionStatus);
         System.out.println(updateTransactionStatus);
-      /*  var paypalConnection = paypalConnectionService
-                .getPayPalConnectionByUserId(paymentMessage.merchantId);
-        var responseFromPayPal = payPalService
-                .createOrder(paymentMessage.amount,paypalConnection.getPayPalEmail());
-        var response = new PaymentCommonResponse();
-        response.setRedirectUrl(responseFromPayPal.getRedirectUrl());
-        response.setAppName("paypal-service");
-        response.setTimeStamp(new Date());
-        response.setBankService(false);*/
-
-       /* jmsTemplate.send(
-                message.getJMSReplyTo(),
-                session -> Objects.requireNonNull(jmsTemplate.getMessageConverter())
-                        .toMessage(response,session)
-        );*/
     }
 }

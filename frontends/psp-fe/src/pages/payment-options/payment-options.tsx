@@ -4,6 +4,7 @@ import './payment-options.scss'
 import {Button} from "../../shared/components/button/button.tsx";
 import {PaymentOption} from "../../shared/model/common/payment-option.ts";
 import {PaymentAmount} from "../payment-transaction/ui/payment-amount/payment-amount.tsx";
+import {PaypalButton} from "./paypal-button.tsx";
 export interface PaymentOptionsProps {
     paymentOptions: PaymentOption[]
     amount: number
@@ -16,6 +17,7 @@ export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptio
         if (!selectedPayment) {
            return
         }
+        if(selectedPayment.name ==='PayPal')
         onPayment(selectedPayment.id);
     }
     const selectPaymentMethod = (method: PaymentOption) => {
@@ -35,6 +37,9 @@ export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptio
                 </div>
                 <PaymentAmount amount={amount}/>
                 <Button onClick={onClick} disabled={selectedPayment === null}>Proceed</Button>
+                {selectedPayment && selectedPayment.name === 'PayPal' && (
+                  <PaypalButton/>
+                )}
             </div>
         </Fragment>
     );
