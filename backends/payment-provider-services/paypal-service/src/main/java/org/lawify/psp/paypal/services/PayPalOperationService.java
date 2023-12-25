@@ -6,10 +6,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lawify.psp.paypal.dtos.CompleteOrder;
 import org.lawify.psp.paypal.dtos.PaymentOrder;
+import org.lawify.psp.paypal.services.dtos.CreateOrderRequest;
+import org.lawify.psp.paypal.shared.converters.StatusConverter;
+import org.lawify.psp.paypal.transactions.TransactionService;
+import org.lawify.psp.paypal.transactions.dtos.CreateTransactionRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,14 +22,15 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class PayPalOperationService {
     private final PayPalHttpClient payPalHttpClient;
+    private final TransactionService transactionService;
 
-    public PaymentOrder createOrder(BigDecimal fee,String email){
+    public PaymentOrder createOrder(CreateOrderRequest request){
         var orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
         var amountBreakDown = new AmountWithBreakdown()
                 .currencyCode("USD")
-                .value(fee.toString());
-        var payee = new Payee().email(email);
+                .value(request.getFee().toString());
+        var payee = new Payee().email(request.getEmail());
         var purchaseUnitRequest = new PurchaseUnitRequest()
                 .amountWithBreakdown(amountBreakDown)
                 .payee(payee);
@@ -45,7 +50,8 @@ public class PayPalOperationService {
                   .findFirst()
                   .orElseThrow(NoSuchElementException::new)
                   .href();
-          return new PaymentOrder("Success",order.id(),redirectUrl);
+           createTransaction(request, order);
+           return new PaymentOrder("Success",order.id(),redirectUrl);
        }catch (IOException e) {
            log.error(e.getMessage());
            return new PaymentOrder("Error");
@@ -54,16 +60,28 @@ public class PayPalOperationService {
 
     }
 
+    private void createTransaction(CreateOrderRequest request, Order order) {
+        var transactionRequest = CreateTransactionRequest
+                .builder()
+                .transactionId(request.getTransactionId())
+                .orderId(order.id())
+                .build();
+        transactionService.saveTransaction(transactionRequest);
+    }
+
     public CompleteOrder completeOrder(String token) {
         var ordersCaptureRequest = new OrdersCaptureRequest(token);
         try {
             var httpResponse = payPalHttpClient.execute(ordersCaptureRequest);
+            var transaction = transactionService.findByOrderId(httpResponse.result().id());
             if(httpResponse.result().status()!=null){
-                return new CompleteOrder("success");
+                return new CompleteOrder(StatusConverter
+                        .ConvertToStatus(httpResponse.result().status()),
+                        transaction.getTransactionId());
             }
         } catch (IOException e){
             log.error(e.getMessage());
         }
-        return new CompleteOrder("error");
+        return new CompleteOrder("Failed");
     }
 }

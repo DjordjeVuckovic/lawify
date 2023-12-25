@@ -4,8 +4,10 @@ import lombok.SneakyThrows;
 import org.lawify.psp.contracts.requests.CompleteOrderRequest;
 import org.lawify.psp.contracts.requests.PaymentCommonResponse;
 import org.lawify.psp.contracts.requests.PaymentMessage;
+import org.lawify.psp.contracts.requests.UpdateTransactionStatus;
 import org.lawify.psp.paypal.payPalConnection.PayPalConnectionService;
 import org.lawify.psp.paypal.services.PayPalOperationService;
+import org.lawify.psp.paypal.services.dtos.CreateOrderRequest;
 import org.springframework.jms.annotation.JmsListener;
 import jakarta.jms.Message;
 import org.springframework.jms.core.JmsTemplate;
@@ -29,8 +31,14 @@ public class PaymentConsumer {
         System.out.println(paymentMessage);
         var paypalConnection = paypalConnectionService
                 .getPayPalConnectionByUserId(paymentMessage.merchantId);
+        var createOrderRequest = CreateOrderRequest
+                .builder()
+                .fee(paymentMessage.amount)
+                .transactionId(paymentMessage.transactionId)
+                .email(paypalConnection.getPayPalEmail())
+                .build();
         var responseFromPayPal = payPalService
-                .createOrder(paymentMessage.amount,paypalConnection.getPayPalEmail());
+                .createOrder(createOrderRequest);
         var response = new PaymentCommonResponse();
         response.setRedirectUrl(responseFromPayPal.getRedirectUrl());
         response.setAppName("paypal-service");
@@ -50,11 +58,9 @@ public class PaymentConsumer {
         var paymentMessage = (CompleteOrderRequest) Objects.requireNonNull(converter).fromMessage(message);
         System.out.println(paymentMessage);
         var responseFromPayPal = payPalService.completeOrder(paymentMessage.token);
-        var response = new PaymentCommonResponse();
-        response.setAppName(responseFromPayPal.getStatus());
-        response.setTimeStamp(new Date());
-        response.setBankService(false);
-
+        var response = new UpdateTransactionStatus();
+        response.setStatus(responseFromPayPal.getStatus());
+        response.setTransactionId(responseFromPayPal.getTransactionId());
         jmsTemplate.send(
                 message.getJMSReplyTo(),
                 session -> Objects.requireNonNull(jmsTemplate.getMessageConverter())

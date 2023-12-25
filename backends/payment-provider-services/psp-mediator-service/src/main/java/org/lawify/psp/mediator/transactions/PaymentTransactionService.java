@@ -83,11 +83,12 @@ public class PaymentTransactionService {
         return feUrl + "/payments?transaction=" + transactionId;
     }
 
-    public PaymentCommonResponse completePayment(String token) {
+    public UpdateTransactionStatus completePayment(String token) {
         var response = messageBroker.sendAndReceive(
                 "paypal-service-queue-complete",
                 new CompleteOrderRequest(token),
-                PaymentCommonResponse.class);
+                UpdateTransactionStatus.class);
+        updateStatus(response);
         return  response;
     }
     public void updateStatus(UpdateTransactionStatus request){
