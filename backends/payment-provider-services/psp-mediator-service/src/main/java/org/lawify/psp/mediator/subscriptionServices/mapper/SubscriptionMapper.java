@@ -10,6 +10,7 @@ public class SubscriptionMapper {
                 .id(service.getId())
                 .name(service.getName())
                 .imageUrl(service.getImageUrl())
+                .price(service.getPrice())
                 .build();
     }
 }

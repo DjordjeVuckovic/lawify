@@ -13,10 +13,11 @@ export interface UserPayload {
     iat: number;
     exp: number;
     jti: string;
-    role: string;
+    roles: string[];
+    id: string;
 }
 export interface User {
     id: string;
     email: string;
-    role: string;
+    roles: string[];
 }

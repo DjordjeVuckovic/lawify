@@ -56,11 +56,9 @@ namespace SepPCC.Controllers
                             // Assuming the image is of a specific format, e.g., "image/png"
                             return File(imageBytes, "image/png");
                         }
-                        else
-                        {
-                            // Handle the error scenario
-                            return StatusCode((int)qrResponse.StatusCode, "Error occurred while making the GET request for QR.");
-                        }
+
+                        // Handle the error scenario
+                        return StatusCode((int)qrResponse.StatusCode, "Error occurred while making the GET request for QR.");
                     }
 
                     return BadRequest($"Problem reading data for account number: {receiverAccountNumber}");

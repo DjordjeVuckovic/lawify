@@ -9,4 +9,5 @@ public class SubscriptionServiceDto {
     public UUID id;
     public String name;
     public String imageUrl;
+    public double price;
 }

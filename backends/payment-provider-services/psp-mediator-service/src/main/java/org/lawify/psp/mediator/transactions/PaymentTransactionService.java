@@ -27,7 +27,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class PaymentTransactionService {
-    @Value("${payment.fe_base_url}")
+    @Value("${payment.fe-base-url}")
     private String feUrl;
     private final PaymentTransactionRepository transactionRepository;
     private final MerchantRepository merchantRepository;

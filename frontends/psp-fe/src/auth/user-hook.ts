@@ -14,9 +14,9 @@ export const useUserPayload = (): User | null => {
         }
         const payload = parseJwt(accessToken);
         const user: User = {
-            email: payload.email,
-            role: payload.role,
-            id: payload.sub
+            email: payload.sub,
+            roles: payload.roles,
+            id: payload.id
         }
         console.log(user)
         setUserPayload(user);

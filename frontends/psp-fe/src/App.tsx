@@ -11,6 +11,9 @@ import {HomePage} from "./pages/home/home.page.tsx";
 import {SignUpPage} from "./pages/sign-in-up/sign-up.page.tsx";
 import {CapturePayment} from "./pages/capture-payment/capture-payment.tsx";
 import {UserPaymentProvidersPage} from "./pages/user-payment-providers/user-payment-providers.page.tsx";
+import {PaymentFail} from "./pages/payment-result/payment-fail.tsx";
+import {PaymentSuccess} from "./pages/payment-result/payment-success.tsx";
+import {SubscribeToNewProviders} from "./pages/user-payment-providers/subscribe-to-new-providers.tsx";
 
 Modal.setAppElement('#root');
 
@@ -28,8 +31,11 @@ function App() {
                         <Route path='/sign-in' element={<SignInPage/>}/>
                         <Route path='/sign-up' element={<SignUpPage/>}/>
                         <Route path='/' element={<HomePage/>}/>
+                        <Route path='/subscriptions/new-payment' element={<SubscribeToNewProviders/>}/>
                         <Route path='/payment-providers' element={<UserPaymentProvidersPage/>}/>
                         <Route path='/capture' element={<CapturePayment/>}/>
+                        <Route path='/subscription-payment-failed' element={<PaymentFail/>}/>
+                        <Route path='/subscription-payment-success' element={<PaymentSuccess/>}/>
                     </Routes>
                 </Body>
                 <Toaster position="bottom-center"

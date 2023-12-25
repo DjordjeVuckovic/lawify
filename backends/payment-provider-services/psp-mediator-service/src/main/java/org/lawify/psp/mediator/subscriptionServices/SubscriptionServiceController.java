@@ -2,14 +2,14 @@ package org.lawify.psp.mediator.subscriptionServices;
 
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.identity.annotations.MerchantRole;
+import org.lawify.psp.mediator.payments.PspPaymentIntend;
+import org.lawify.psp.mediator.subscriptionServices.dto.SubscriptionPayment;
 import org.lawify.psp.mediator.subscriptionServices.dto.SubscriptionServiceDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/psp-mediator-service/api/v1/subscriptions")
@@ -22,10 +22,21 @@ public class SubscriptionServiceController {
         var subs = service.findAll();
         return ResponseEntity.ok(subs);
     }
-    @GetMapping("merchants/{id}")
+    @GetMapping("users/{id}")
     @MerchantRole
-    public ResponseEntity<List<SubscriptionServiceDto>> getMerchantSubscriptions(@PathVariable String id) {
-        var subs = service.findAll();
+    public ResponseEntity<List<SubscriptionServiceDto>> getSubscriptions(@PathVariable UUID id) {
+        var subs = service.findByUser(id);
         return ResponseEntity.ok(subs);
+    }
+    @GetMapping("/available/users/{id}")
+    @MerchantRole
+    public ResponseEntity<List<SubscriptionServiceDto>> getAvailableSubscriptions(@PathVariable UUID id) {
+        var subs = service.findAvailableByUser(id);
+        return ResponseEntity.ok(subs);
+    }
+    @PostMapping("payment-intent")
+    public ResponseEntity<PspPaymentIntend> processPaymentIntent(@RequestBody SubscriptionPayment request) {
+        var response = service.handleNewPayment(request);
+        return ResponseEntity.ok(response);
     }
 }

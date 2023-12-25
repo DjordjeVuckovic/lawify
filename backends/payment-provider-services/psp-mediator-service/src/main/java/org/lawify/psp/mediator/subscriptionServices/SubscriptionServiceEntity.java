@@ -3,6 +3,7 @@ package org.lawify.psp.mediator.subscriptionServices;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 @Entity
@@ -25,4 +26,6 @@ public class SubscriptionServiceEntity {
     private String queueName;
     @Column
     private String imageUrl;
+    @Column
+    private double price;
 }
