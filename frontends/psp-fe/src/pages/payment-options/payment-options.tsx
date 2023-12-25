@@ -11,7 +11,7 @@ export interface PaymentOptionsProps {
 }
 export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptionsProps) => {
     const [selectedPayment, setSelectedPayment] = useState<PaymentOption | null>(null);
-    const payments = paymentOptions ?? paymentOptions
+    const payments = paymentOptions
     const onClick = () => {
         if (!selectedPayment) {
            return

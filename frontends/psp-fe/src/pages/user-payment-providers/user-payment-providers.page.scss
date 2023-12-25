@@ -1,0 +1,8 @@
+@import "../../sass/mixins";
+.payment-providers-container{
+  display: flex;
+  flex-direction: column;
+}
+.payment-providers-btn{
+  @include icon-button;
+}

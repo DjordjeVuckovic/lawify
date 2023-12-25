@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubscriptionService {
+public class SubscriptionServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

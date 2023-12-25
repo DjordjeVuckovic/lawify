@@ -2,7 +2,7 @@ package org.lawify.psp.mediator.transactions;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.lawify.psp.mediator.subscriptionServices.SubscriptionService;
+import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,7 +30,7 @@ public class PaymentTransaction {
     @Column
     private TransactionStatus status;
     @ManyToOne
-    private SubscriptionService service;
+    private SubscriptionServiceEntity service;
     public String statusToString(){
          return switch (status){
             case STARTED -> "Started";

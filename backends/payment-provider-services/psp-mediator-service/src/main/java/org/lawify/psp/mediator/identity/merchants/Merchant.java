@@ -8,9 +8,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.lawify.psp.mediator.apiKeys.ApiKey;
 import org.lawify.psp.mediator.shared.crypto.converters.CryptoConverter;
-import org.lawify.psp.mediator.subscriptionServices.SubscriptionService;
 import org.lawify.psp.mediator.identity.PspRole;
 import org.lawify.psp.mediator.identity.UserBase;
+import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceEntity;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Merchant extends UserBase {
     @ManyToMany(
             fetch = FetchType.LAZY
     )
-    private List<SubscriptionService> subscriptionServices;
+    private List<SubscriptionServiceEntity> subscriptionServices;
     @Column
     private String name;
     @Column
