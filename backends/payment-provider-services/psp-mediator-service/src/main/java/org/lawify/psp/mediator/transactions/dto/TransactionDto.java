@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.lawify.psp.mediator.subscriptionServices.SubscriptionService;
-import org.lawify.psp.mediator.transactions.TransactionStatus;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -1,8 +1,9 @@
 import {Link} from "react-router-dom";
 import "./nav-link.scss"
+import {ReactNode} from "react";
 
-export const NavLink = ({title,url}: {title: string,url: string}) => {
+export const NavLink = ({children,url}: {children: ReactNode,url: string}) => {
     return (
-        <Link className={'link'} to={url}>{title}</Link>
+        <Link className={'link'} to={url}>{children}</Link>
     );
 };

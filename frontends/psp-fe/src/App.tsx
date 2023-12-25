@@ -9,8 +9,8 @@ import {SignInPage} from "./pages/sign-in-up/sign-in.page.tsx";
 import {Toaster} from "react-hot-toast";
 import {HomePage} from "./pages/home/home.page.tsx";
 import {SignUpPage} from "./pages/sign-in-up/sign-up.page.tsx";
-import React from "react";
 import {CapturePayment} from "./pages/capture-payment/capture-payment.tsx";
+import {UserPaymentProvidersPage} from "./pages/user-payment-providers/user-payment-providers.page.tsx";
 
 Modal.setAppElement('#root');
 
@@ -28,10 +28,13 @@ function App() {
                         <Route path='/sign-in' element={<SignInPage/>}/>
                         <Route path='/sign-up' element={<SignUpPage/>}/>
                         <Route path='/' element={<HomePage/>}/>
+                        <Route path='/payment-providers' element={<UserPaymentProvidersPage/>}/>
                         <Route path='/capture' element={<CapturePayment/>}/>
                     </Routes>
                 </Body>
-                <Toaster />
+                <Toaster position="bottom-center"
+                         reverseOrder={false}
+                />
             </QueryClientProvider>
         </>
     )
