@@ -1,18 +1,20 @@
 package org.lawify.psp.mediator.payments.stripe;
 
 import com.stripe.Stripe;
-import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
-import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
-import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.lawify.psp.mediator.payments.IPaymentClient;
 import org.lawify.psp.mediator.payments.PspPaymentIntend;
+import org.lawify.psp.mediator.payments.models.PspLineItem;
+import org.lawify.psp.mediator.payments.models.UserInfo;
+import org.lawify.psp.mediator.subscriptionServices.SubscriptionHandleService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -28,32 +30,23 @@ public class StripeClient implements IPaymentClient {
 
     @SneakyThrows
     @Override
-    public PspPaymentIntend createPaymentIntent(double amountInEur, String email) {
+    public PspPaymentIntend createPaymentIntent(UserInfo userInfo, List<PspLineItem> lineItems) {
         Stripe.apiKey = stripeApiKey;
         log.info(Stripe.apiKey);
+
+        var stripeLineItems = lineItems.stream()
+                .map(StripeLineItemBuilder::buildStripeLineItem)
+                .toList();
+
         var params = SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setSuccessUrl(clientUrl + "/" + clientSuccessUrl)
                 .setCancelUrl(clientUrl + "/" + clientFailUrl)
-                .setCustomerEmail(email)
+                .setCustomerEmail(userInfo.email)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .addLineItem(
-                        SessionCreateParams.LineItem.builder()
-                                .setQuantity(1L)
-                                .setPriceData(
-                                        SessionCreateParams.LineItem.PriceData.builder()
-                                                .setCurrency("EUR")
-                                                .setUnitAmount((long) amountInEur * 100)
-                                                .setProductData(
-                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                .setName("Your Product or Service")
-                                                                .build()
-                                                )
-                                                .build()
-                                )
-                                .build()
-                )
+                .addAllLineItem(stripeLineItems)
                 .build();
+
         Session session = Session.create(params);
         return new PspPaymentIntend(session.getUrl());
     }

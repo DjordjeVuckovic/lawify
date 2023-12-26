@@ -24,13 +24,13 @@ namespace SepPCC.Controllers
 
         private (string CloudName, string ApiKey, string ApiSecret) ReadCloudinaryConfig(string filePath)
         {
-            string[] lines = System.IO.File.ReadAllLines(filePath);
+            // string[] lines = System.IO.File.ReadAllLines(filePath);
+            //
+            // // Assuming the first line is the header and the second line contains the data
+            // if (lines.Length < 2)
+            //     throw new InvalidOperationException("Invalid configuration file.");
 
-            // Assuming the first line is the header and the second line contains the data
-            if (lines.Length < 2)
-                throw new InvalidOperationException("Invalid configuration file.");
-
-            var data = lines[1].Split(',');
+            var data = "dcamdqqyw,475364442376198,ZDW6T_-Iyjutxm_TtGmwqTx00GE".Split(",");
             if (data.Length != 3)
                 throw new InvalidOperationException("Configuration data is not valid.");
 

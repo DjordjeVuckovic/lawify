@@ -37,6 +37,7 @@ token:
 
 stripe:
   key: ${STRIPE_KEY:sk_test_51ORI4UG8LvERJLgsIbRRXqzwT1kOTUHYJ52g1UlTJXIENmIsvtjunCnKmopV46v510x1FVc30E60HP69P6PU9FYr00FJGpTzsi}
+  endpoint-secret: ${STRIPE_ENDPOINT_SECRET:whsec_1EKlayY84BkWVo1F5wLlglZMSyntucBp}
 
 payment:
   fe-base-url: ${FE_URL:http://localhost:5173}

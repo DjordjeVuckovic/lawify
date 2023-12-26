@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class SubscriptionPayment {
-    String email;
-    UUID subscriptionId;
+    UUID userId;
+    List<UUID> subscriptionIds;
 }

@@ -41,7 +41,7 @@ export const SubscribeToNewProviders = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         const payment: SubscriptionPaymentRequest = {
-            userEmail: user.email,
+            userId: user.id,
             subscriptionIds: selectedPayments.map(x => x.id)
         }
         mutation.mutate(payment)

@@ -9,6 +9,6 @@ export interface PaymentIntent{
 }
 
 export interface SubscriptionPaymentRequest {
-    userEmail: string;
+    userId: string;
     subscriptionIds: string[];
 }
