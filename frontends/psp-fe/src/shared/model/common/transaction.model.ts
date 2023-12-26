@@ -13,8 +13,8 @@ export type TransactionStatus = 'PENDING' | 'SUCCESS' | 'FAILED' | "STARTED";
 
 export type GetTransactionResponse = {
     transaction: TransactionModel;
-    token: string;
     availableServices: PaymentOption[];
+    backAccount: string;
 };
 
 export interface TransactionRequest {

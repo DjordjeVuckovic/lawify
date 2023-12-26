@@ -8,7 +8,7 @@ import {PaypalButton} from "./paypal-button.tsx";
 export interface PaymentOptionsProps {
     paymentOptions: PaymentOption[]
     amount: number
-    onPayment: (paymentId: string) => void
+    onPayment: (paymentId: string, paymentName: string) => void
 }
 export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptionsProps) => {
     const [selectedPayment, setSelectedPayment] = useState<PaymentOption | null>(null);
@@ -17,8 +17,8 @@ export const PaymentOptions = ({onPayment,paymentOptions, amount} : PaymentOptio
         if (!selectedPayment) {
            return
         }
-        if(selectedPayment.name ==='PayPal')
-        onPayment(selectedPayment.id);
+        console.log(selectedPayment)
+        onPayment(selectedPayment.id,selectedPayment.name);
     }
     const selectPaymentMethod = (method: PaymentOption) => {
         setSelectedPayment(method);

@@ -10,4 +10,5 @@ public class TransactionResponse {
     public TransactionDto transaction;
     public String token;
     public List<SubscriptionServiceDto> availableServices;
+    public String backAccount;
 }

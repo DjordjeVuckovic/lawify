@@ -2,6 +2,7 @@ package org.lawify.psp.mediator.apiKeys;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.lawify.psp.mediator.apiKeys.dto.ApiKeyRequest;
 import org.lawify.psp.mediator.apiKeys.dto.ApiKeyResponse;
 import org.lawify.psp.mediator.shared.crypto.hash.HashService;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ApiKeyService {
     private final MerchantRepository merchantRepository;
     private final ApiKeyRepository apiKeyRepository;
@@ -26,6 +28,7 @@ public class ApiKeyService {
                 .orElseThrow(() -> new ApiNotFound("Cannot find merchant with id " + apiKeyDto.merchantId));
 
         var key = generateKey();
+        log.info("Generated key {}", key);
         var hashKey = hashService.hashFixed(key);
         var apiKey = ApiKey.builder()
                 .key(hashKey)

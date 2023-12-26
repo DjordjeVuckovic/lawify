@@ -15,6 +15,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("CorsPolicy",
+        x => x
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin());
+});
+
 builder.Services.AddTransient<DbContextService>();
 builder.Services.AddScoped<TransactionService>();
 builder.Services.AddSingleton<Dictionary<Guid, (DateTime, Guid, double)>>(); // The transaction requests dictionary
@@ -58,6 +66,9 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
+
 app.UseStaticFiles();
 
 app.UseRouting();

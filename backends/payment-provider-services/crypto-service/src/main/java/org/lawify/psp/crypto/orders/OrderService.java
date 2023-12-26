@@ -31,10 +31,10 @@ public class OrderService {
     private final AccountService accountService;
 
     public CreateOrderResponse createOrder(CreateOrderRequest request){
-        var account = accountService.getAccount(request.getMerchantId());
+        //var account = accountService.getAccount(request.getMerchantId());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Bearer " + account.getApiKey());
+        headers.set("Authorization", "Bearer " + "x9sgF8BY_9u-y2kRSVj-mg9fZ36-nsyjVxE7s7DV");
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("price_amount",String.valueOf( request.getPriceAmount())); // Replace these with actual fields of your DTO
         map.add("price_currency", request.getPriceCurrency()); // Replace these with actual fields of your DTO

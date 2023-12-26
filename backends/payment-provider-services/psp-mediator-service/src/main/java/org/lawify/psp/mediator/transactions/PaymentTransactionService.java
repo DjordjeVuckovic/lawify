@@ -36,7 +36,6 @@ public class PaymentTransactionService {
     private final ApiKeyService service;
     private final SubscriptionServiceRepository subscriptionServiceRepository;
     private final IMessageBroker messageBroker;
-    private final IJwtService jwtService;
 
     public InitialTransactionResponse createInitial(InitialTransactionRequest request, String apiKey) {
         var merchant = merchantRepository.findByEmail(request.getMerchantUsername())
@@ -71,14 +70,13 @@ public class PaymentTransactionService {
                         ("Merchant with id: " + transaction.getMerchantId() + " not found.")
                 );
 
-        var jwt = jwtService.generateToken(merchant);
 
         var services = merchant.getSubscriptionServices().stream().map(SubscriptionMapper::toDto).toList();
 
         return TransactionResponse.builder()
                 .transaction(TransactionMapper.map(transaction))
                 .availableServices(services)
-                .token(jwt)
+                .backAccount(merchant.getBankAccount())
                 .build();
     }
     @Transactional

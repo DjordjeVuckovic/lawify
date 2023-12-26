@@ -19,7 +19,7 @@ export const PaymentProvidersOptions = ({paymentOptions, onSelection}: PaymentOp
         const payments = !exists ?
             [...selectedPayments, {...method, isSelected: true}]
             : selectedPayments.map(x => x.id === method.id ? {...x, isSelected: !x.isSelected} : x);
-        onSelection(payments)
+        onSelection(payments.filter(x => x.isSelected))
         setSelectedPayments(payments);
     };
     return (
