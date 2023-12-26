@@ -3,10 +3,7 @@ package org.lawify.psp.mediator.transactions;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.lawify.psp.mediator.shared.utils.ResponseBuilder;
-import org.lawify.psp.mediator.transactions.dto.FinishTransactionRequest;
-import org.lawify.psp.mediator.transactions.dto.InitialTransactionRequest;
-import org.lawify.psp.mediator.transactions.dto.TransactionDto;
-import org.lawify.psp.mediator.transactions.dto.TransactionRequest;
+import org.lawify.psp.mediator.transactions.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +30,7 @@ public class PaymentTransactionController {
                 .body(transactionResponse);
     }
     @GetMapping("{id}")
-    public ResponseEntity<TransactionDto> get(@NonNull @PathVariable UUID id){
+    public ResponseEntity<TransactionResponse> get(@NonNull @PathVariable UUID id){
         return ResponseEntity.ok(transactionService.getStartedTransaction(id));
     }
     @PostMapping("/payment")

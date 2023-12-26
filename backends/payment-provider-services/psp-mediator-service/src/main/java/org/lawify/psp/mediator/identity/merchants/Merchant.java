@@ -30,7 +30,7 @@ public class Merchant extends UserBase {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ApiKey> apiKeys;
     @ManyToMany(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     private List<SubscriptionServiceEntity> subscriptionServices;
     @Column
@@ -46,5 +46,8 @@ public class Merchant extends UserBase {
         this.name = name;
         this.bankAccount = bankAccount;
         addRole(PspRole.MERCHANT);
+    }
+    public void addNewServices(List<SubscriptionServiceEntity> subs){
+        this.subscriptionServices.addAll(subs);
     }
 }

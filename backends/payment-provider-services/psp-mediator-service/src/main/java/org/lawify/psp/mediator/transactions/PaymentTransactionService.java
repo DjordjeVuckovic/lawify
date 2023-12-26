@@ -11,10 +11,12 @@ import org.lawify.psp.mediator.apiKeys.ApiKeyService;
 import org.lawify.psp.mediator.shared.converters.StatusConverter;
 import org.lawify.psp.mediator.shared.exceptions.ApiNotFound;
 import org.lawify.psp.mediator.shared.exceptions.ApiUnauthorized;
+import org.lawify.psp.mediator.shared.jwt.IJwtService;
 import org.lawify.psp.mediator.subscriptionServices.SubscriptionServiceRepository;
+import org.lawify.psp.mediator.subscriptionServices.mapper.SubscriptionMapper;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionRequest;
 import org.lawify.psp.mediator.transactions.dto.InitialTransactionResponse;
-import org.lawify.psp.mediator.transactions.dto.TransactionDto;
+import org.lawify.psp.mediator.transactions.dto.TransactionResponse;
 import org.lawify.psp.mediator.transactions.erros.InvalidTransactionStatus;
 import org.lawify.psp.mediator.transactions.mapper.TransactionMapper;
 import org.lawify.psp.mediator.identity.merchants.MerchantRepository;
@@ -34,11 +36,12 @@ public class PaymentTransactionService {
     private final ApiKeyService service;
     private final SubscriptionServiceRepository subscriptionServiceRepository;
     private final IMessageBroker messageBroker;
+    private final IJwtService jwtService;
 
     public InitialTransactionResponse createInitial(InitialTransactionRequest request, String apiKey) {
         var merchant = merchantRepository.findByEmail(request.getMerchantUsername())
                 .orElseThrow(() -> new ApiUnauthorized
-                        ("Merchant with username: " + request.getMerchantUsername() + "not found.")
+                        ("Merchant with username: " + request.getMerchantUsername() + " not found.")
                 );
         var isValidKey = service.contains(merchant.getApiKeys(), apiKey);
         if(!isValidKey){
@@ -55,7 +58,7 @@ public class PaymentTransactionService {
         transactionRepository.save(transaction);
         return new InitialTransactionResponse(buildFeUrl(transaction.getId()),transaction.getId());
     }
-    public TransactionDto getStartedTransaction(UUID id){
+    public TransactionResponse getStartedTransaction(UUID id){
         var transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ApiNotFound("Transaction not found"));
 
@@ -63,7 +66,20 @@ public class PaymentTransactionService {
             throw new InvalidTransactionStatus("Transaction already processed");
         }
 
-        return TransactionMapper.map(transaction);
+        var merchant = merchantRepository.findById(transaction.getMerchantId())
+                .orElseThrow(() -> new ApiUnauthorized
+                        ("Merchant with id: " + transaction.getMerchantId() + " not found.")
+                );
+
+        var jwt = jwtService.generateToken(merchant);
+
+        var services = merchant.getSubscriptionServices().stream().map(SubscriptionMapper::toDto).toList();
+
+        return TransactionResponse.builder()
+                .transaction(TransactionMapper.map(transaction))
+                .availableServices(services)
+                .token(jwt)
+                .build();
     }
     @Transactional
     public PaymentCommonResponse processPayment(UUID transactionId,UUID subscriptionId){

@@ -2,15 +2,16 @@ import {useSearchParams} from "react-router-dom";
 import {PaymentOptions} from "../payment-options/payment-options.tsx";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {fetchTransaction, processTransaction} from "../../shared/services/transaction.service.ts";
-import {fetchSubscriptions} from "../../shared/services/subscription.service.ts";
 import {AxiosError} from "axios";
 import {TransactionResponse} from "../../shared/model/common/transaction.model.ts";
 import {BankModal} from "./ui/bank-modal/bank-modal.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import useAuthStore from "../../auth/auth-store.ts";
 
 export const PaymentTransactionPage = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [iframeUrl, setIframeUrl] = useState('');
+    const {setAccessToken} = useAuthStore()
     const openModal = (response: TransactionResponse) => {
         setModalIsOpen(true);
         setIframeUrl(response.redirectUrl)
@@ -25,11 +26,6 @@ export const PaymentTransactionPage = () => {
         queryFn: () => fetchTransaction(transactionId),
         enabled: !!transactionId,
     });
-
-    const paymentOptionsQuery = useQuery({
-        queryKey: ['paymentOptions'],
-        queryFn: fetchSubscriptions,
-    });
     const mutation = useMutation({
         mutationFn: processTransaction,
         onError: (error: AxiosError) => {
@@ -38,8 +34,7 @@ export const PaymentTransactionPage = () => {
         onSuccess: (response: TransactionResponse) => {
             console.log("success")
             console.log(response)
-            if(response.bankService)
-            {
+            if (response.bankService) {
                 openModal(response)
                 return
             }
@@ -47,16 +42,22 @@ export const PaymentTransactionPage = () => {
 
         }
     });
-    if (transactionQuery.isLoading || paymentOptionsQuery.isLoading) return <div>Loading...</div>;
-    if (transactionQuery.isError || paymentOptionsQuery.isError) return <div>Error: {transactionQuery.error?.message}</div>;
+    useEffect(() => {
+            if (transactionQuery.isSuccess && transactionQuery.data?.token) {
+                setAccessToken(transactionQuery.data.token)
+            }
+        }, [transactionQuery.isSuccess, transactionQuery.data?.token]
+    )
+    if (transactionQuery.isLoading) return <div>Loading...</div>;
+    if (transactionQuery.isError) return <div>Error: {transactionQuery.error?.message}</div>;
     const processPaymentTransaction = (subscriptionId: string) => {
         console.log('processPaymentTransaction')
-        mutation.mutate({transactionId: transactionQuery.data!.id, subscriptionId: subscriptionId})
+        mutation.mutate({transactionId: transactionQuery.data!.transaction.id, subscriptionId: subscriptionId})
     }
     return (
         <>
-            <PaymentOptions paymentOptions={paymentOptionsQuery.data!}
-                            amount={transactionQuery.data!.amount}
+            <PaymentOptions paymentOptions={transactionQuery.data!.availableServices}
+                            amount={transactionQuery.data!.transaction.amount}
                             onPayment={(paymentId) => processPaymentTransaction(paymentId)}
             />
             <BankModal isOpen={modalIsOpen} onClose={closeModal} iframeUrl={iframeUrl}/>

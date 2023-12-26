@@ -1,11 +1,21 @@
+import {PaymentOption} from "./payment-option.ts";
+
 export interface TransactionModel {
     id: string;
     orderId: string;
     timeStamp: Date;
     merchantId: string;
     amount: number;
-    status: string;
+    status: TransactionStatus;
 }
+
+export type TransactionStatus = 'PENDING' | 'SUCCESS' | 'FAILED' | "STARTED";
+
+export type GetTransactionResponse = {
+    transaction: TransactionModel;
+    token: string;
+    availableServices: PaymentOption[];
+};
 
 export interface TransactionRequest {
     transactionId: string;

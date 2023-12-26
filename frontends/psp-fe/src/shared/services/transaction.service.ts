@@ -1,7 +1,11 @@
 import {httpClient} from "../../http-client/http-client.ts";
-import {TransactionModel, TransactionRequest, TransactionResponse} from "../model/common/transaction.model.ts";
+import {
+    GetTransactionResponse,
+    TransactionRequest,
+    TransactionResponse
+} from "../model/common/transaction.model.ts";
 
-export const fetchTransaction = async (transactionId: string | null): Promise<TransactionModel> => {
+export const fetchTransaction = async (transactionId: string | null): Promise<GetTransactionResponse> => {
     if(!transactionId){
         return Promise.reject();
     }

@@ -91,7 +91,7 @@ public class SubscriptionHandleService {
 
         var user = merchantRepository.findByEmail(userEmail).orElseThrow(() -> new ApiNotFound("User not found"));
 
-        user.setSubscriptionServices(payedSubs);
+        user.addNewServices(payedSubs);
         merchantRepository.save(user);
 
 
