@@ -29,7 +29,7 @@ public class PaymentConsumer {
         var paymentMessage = (PaymentMessage) Objects.requireNonNull(converter).fromMessage(message);
         var request = CreateOrderRequest.builder()
                 .priceCurrency("USD")
-                .callbackUrl("https://2b9f-188-2-101-162.ngrok-free.app/api/v1/transactions/notify")
+                .callbackUrl("https://746d-188-120-96-66.ngrok-free.app/api/v1/transactions/notify")
                 .receiveCurrency("BTC")
                 .transactionId(paymentMessage.transactionId)
                 .priceAmount(0.11)

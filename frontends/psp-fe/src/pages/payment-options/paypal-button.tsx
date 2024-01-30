@@ -6,7 +6,9 @@ export const PaypalButton = () => {
         script.src = "https://www.paypal.com/sdk/js?client-id=Aa1u29AHYoRdBI98eBNq5n_Z9ynTykQyIWQ_XMNMSZW2EAI8HUpEgMVLAGcEGrQRvkp-ohPJFOjkE-9P&vault=true&intent=subscription";
         script.addEventListener('load', () => {
             // Ensure the global `paypal` object exists
+            // @ts-ignore
             if (window.paypal) {
+                // @ts-ignore
                 window.paypal.Buttons({
                     style: {
                         shape: 'pill',
@@ -14,12 +16,12 @@ export const PaypalButton = () => {
                         layout: 'vertical',
                         label: 'paypal'
                     },
-                    createSubscription: function(data, actions) {
+                    createSubscription: function(_, actions) {
                         return actions.subscription.create({
                             plan_id: 'P-5PG1946263622900VMWE6GJA'
                         });
                     },
-                    onApprove: function(data, actions) {
+                    onApprove: function(_, __) {
                         window.location.href = 'http://localhost:4200';
                         history.pushState(null, null, window.location.href);
                         window.onpopstate = function () {

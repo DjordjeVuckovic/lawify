@@ -1,10 +1,27 @@
 server:
   port: ${PORT:8081}
+  ssl:
+    bundle: "server"
+    enabled-protocols: TlSv1.3
 
 spring:
   application:
     name: psp-mediator-service
-# db config
+  ssl:
+    bundle:
+      jks:
+        server:
+          key:
+            alias: "psp-lawify"
+          keystore:
+            location: "classpath:keystore.p12"
+            password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+            type: "PKCS12"
+      pem:
+        client:
+          truststore:
+            certificate: "classpath:cert.pem"
+  # db config
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5401/psp-mediator-db}
     username: ${DB_USER:user}
