@@ -1,11 +1,44 @@
 spring:
   application:
     name: eureka-server
+  ssl:
+    bundle:
+      jks:
+        psp-lawify:
+          key:
+            alias: "psp-lawify"
+          keystore:
+            location: "classpath:dev-keystore.p12"
+            password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+            type: "PKCS12"
+      pem:
+        client:
+          truststore:
+            certificate: "classpath:dev-cert.pem"
 server:
   port: 8761
+  ssl:
+    enabled: true
+    bundle: "psp-lawify"
+    enabled-protocols: TlSv1.3
+    key-store: "classpath:dev-keystore.p12"
+    key-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+    key-store-type: "PKCS12"
+    trust-store: "classpath:dev-keystore.p12"
+    trust-store-type: PKCS12
+    trust-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+
 eureka:
+  instance:
+    hostname: localhost
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: ${server.port}
+    status-page-url: 'https://${eureka.instance.hostName}:${server.port}/info'
+    home-page-url: 'https://${eureka.instance.hostName}:${server.port}/'
+    health-check-url: 'https://${eureka.instance.hostName}:${server.port}/health'
   client:
     fetch-registry: false
     register-with-eureka: false
     serviceUrl:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL:https://localhost:8761/eureka}

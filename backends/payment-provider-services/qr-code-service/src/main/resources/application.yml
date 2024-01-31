@@ -1,9 +1,26 @@
 server:
   port: ${PORT:8084}
+  ssl:
+    bundle: psp-lawify
+    enabled-protocols: TlSv1.3
 
 spring:
   application:
     name: qr-code-service
+  ssl:
+    bundle:
+      jks:
+        psp-lawify:
+          key:
+            alias: "psp-lawify"
+          keystore:
+            location: "classpath:dev-keystore.p12"
+            password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+            type: "PKCS12"
+      pem:
+        client:
+          truststore:
+            certificate: "classpath:dev-cert.pem"
   activemq:
     broker-url: ${BROKER_URL:tcp://localhost:61616}
     user: ${BROKER_USER:admin}
@@ -15,5 +32,14 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL:https://localhost:8761/eureka}
+    tls:
+      enabled: true
+      key-store: "classpath:dev-keystore.p12"
+      key-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+      key-store-type: "PKCS12"
+      trust-store: "classpath:dev-keystore.p12"
+      trust-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+      trust-store-type: PKCS12
+      key-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
 

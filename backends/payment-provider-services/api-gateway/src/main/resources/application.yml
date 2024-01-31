@@ -1,27 +1,70 @@
 server:
   port: 8080
+  ssl:
+    bundle: psp-lawify
+    enabled-protocols: TlSv1.3
 
 eureka:
+  instance:
+    hostname: localhost
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    secure-port: ${server.port:8080}
+    status-page-url: https://${eureka.instance.hostname}:${server.port}/actuator/info
+    health-check-url: https://${eureka.instance.hostname}:${server.port}/actuator/health
+    home-page-url: https://${eureka.instance.hostname}:${server.port}/
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL:https://localhost:8761/eureka}
     fetch-registry: true
     register-with-eureka: true
+    tls:
+      enabled: true
+      key-store: "classpath:dev-keystore.p12"
+      key-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+      key-store-type: "PKCS12"
+      trust-store: "classpath:dev-keystore.p12"
+      trust-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+      trust-store-type: PKCS12
+      key-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
 
 spring:
   application:
     name: api-gateway
+  ssl:
+    bundle:
+      jks:
+        psp-lawify:
+          key:
+            alias: "psp-lawify"
+          keystore:
+            location: "classpath:dev-keystore.p12"
+            password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
+            type: "PKCS12"
+      pem:
+        client:
+          truststore:
+            certificate: "classpath:dev-cert.pem"
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       globalcors:
-        add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
-            allowed-origin-patterns: '*'
-            allowed-methods: '*'
-            allowed-headers: '*'
-            allow-credentials: true
-            max-age: 3600
+            allowed-origin-patterns:
+              - "http://localhost:*"
+              - "https://localhost:*"
+            allowed-methods:
+              - POST
+              - GET
+              - OPTIONS
+              - PUT
+            allowed-headers: "*"
+            allowCredentials: true
       routes:
         - id: psp-mediator-service
           uri: lb://psp-mediator-service
