@@ -52,6 +52,6 @@ eureka:
       key-store-password: ${KEYSTORE_PASS:22Nn5pvlJgmWR51Z}
 
 bank:
-  baseUrl: http://localhost:7000
+  baseUrl: https://localhost:7000
   transactionPath: /Transactions/MakeTransaction?transactionId=
 

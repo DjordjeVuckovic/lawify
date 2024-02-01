@@ -8,10 +8,17 @@ services:
       dockerfile: SepBank/Dockerfile
     environment:
       - CODE=120  # Set the environment variable CODE to 120 for sepbank1
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=22Nn5pvlJgmWR51Z
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certificate.p12
+    volumes:
+      - ./certs/dev-keystore.p12:/app/certificate.p12
     depends_on:
       - sqlserver  # Add a dependency on the sqlserver service
     ports:
-      - "7000:80"  # Map host port 8080 to container port 80 for sepbank1
+      - "7000:443"  # Map host port 8080 to container port 80 for sepbank1
 
   sepbank2:
     image: ${DOCKER_REGISTRY-}sepbank
@@ -20,20 +27,36 @@ services:
       dockerfile: SepBank/Dockerfile
     environment:
       - CODE=220  # Set the environment variable CODE to 220 for sepbank2
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=22Nn5pvlJgmWR51Z
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certificate.p12
+    volumes:
+      - ./certs/dev-keystore.p12:/app/certificate.p12
     depends_on:
       - sqlserver  # Add a dependency on the sqlserver service
     ports:
-      - "7001:80"  # Map host port 8081 to container port 80 for sepbank2
+      - "7001:443"  # Map host port 8081 to container port 80 for sepbank2
 
   seppcc:
     image: ${DOCKER_REGISTRY-}seppcc
+    environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=22Nn5pvlJgmWR51Z
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certificate.p12
+    volumes:
+      - ./certs/dev-keystore.p12:/app/certificate.p12
     build:
       context: .
       dockerfile: SepPCC/Dockerfile
     depends_on:
       - sqlserver  # Add a dependency on the sqlserver service
     ports:
-      - "7002:80"  # Map host port 8082 to container port 80 for seppcc
+      - "7002:443" 
+      - "7005:80" 
       
   sqlserver:
     image: mcr.microsoft.com/mssql/server
